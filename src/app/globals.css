@@ -221,6 +221,13 @@
     font-size: clamp(3rem, 2.2vw + 3.2vh, 5.1rem);
     line-height: 1.15;
   }
+  /* Past the container's max-width (80rem/1536px 2xl breakpoint) vw growth no longer tracks the
+     actual column width, so the heading would keep ballooning on ultra-wide monitors. Cap it there. */
+  @media (min-width: 2000px) {
+    .display-xl {
+      font-size: 3.75rem;
+    }
+  }
   .display-lg {
     font-size: clamp(1.95rem, 1.1vw + 1.8vh, 3rem);
     line-height: 1.1;
