@@ -7,6 +7,7 @@ import { useSite } from "@/components/providers/site-provider";
 import { Field, inputClass } from "@/components/shared/form";
 import { Turnstile, TURNSTILE_SITE_KEY } from "@/components/shared/turnstile";
 import { bookingReasons, reasonById } from "@/content/booking";
+import { clinic } from "@/content/clinic";
 import type { Doctor } from "@/content/doctors";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -168,7 +169,7 @@ export function BookingDetails({
               </span>
               <span className="hidden items-center gap-1.5 sm:inline-flex">
                 <MapPin className="size-3.5" aria-hidden="true" />
-                {t("location")}
+                {clinic.address.street[locale]}
               </span>
             </p>
           </div>
