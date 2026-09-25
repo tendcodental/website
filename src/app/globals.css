@@ -1,0 +1,329 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sofia), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-cormorant), Georgia, serif;
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Brand palette, taken from the T&Co Dental logo */
+  --color-ivory: #fbf9f5;
+  --color-sand: #f3eee4;
+  --color-sand-deep: #e9e1d2;
+  --color-ink: #13231d;
+  --color-emerald: #1e5a45;
+  --color-emerald-bright: #2e8a5e;
+  --color-emerald-deep: #0f3328;
+  --color-emerald-night: #0a241c;
+  --color-gold: #c29b4a;
+  --color-gold-light: #e6c67e;
+  --color-gold-dark: #8a6420;
+  --color-alert: #d8453b;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-fade-up: fade-up 0.9s var(--ease-out-expo) both;
+  --animate-fade-in: fade-in 0.8s ease both;
+  --animate-scale-in: scale-in 1.2s var(--ease-out-expo) both;
+  /* Transform-only entrances (no opacity) for LCP-critical elements. */
+  --animate-settle: settle 1.6s var(--ease-out-expo) both;
+  --animate-rise: rise 1s var(--ease-out-expo) both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-marquee: marquee var(--marquee-duration, 60s) linear infinite;
+  --animate-marquee-reverse: marquee var(--marquee-duration, 60s) linear infinite reverse;
+  --animate-pulse-ring: pulse-ring 2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  --animate-shimmer: shimmer 3.2s ease-in-out infinite;
+  --animate-step-in: step-in 0.5s var(--ease-out-expo) both;
+  --animate-step-back: step-back 0.5s var(--ease-out-expo) both;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translate3d(0, 22px, 0); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(1.06); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes grow-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes settle {
+    from { transform: scale(1.07); }
+    to { transform: none; }
+  }
+  @keyframes rise {
+    from { transform: translate3d(0, 26px, 0); }
+    to { transform: none; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -8px, 0); }
+  }
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    80%, 100% { transform: scale(2.4); opacity: 0; }
+  }
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes step-in {
+    from { opacity: 0; transform: translate3d(28px, 0, 0); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes step-back {
+    from { opacity: 0; transform: translate3d(-28px, 0, 0); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+:root {
+  --background: #fbf9f5;
+  --foreground: #13231d;
+  --card: #ffffff;
+  --card-foreground: #13231d;
+  --popover: #ffffff;
+  --popover-foreground: #13231d;
+  --primary: #1e5a45;
+  --primary-foreground: #ffffff;
+  --secondary: #f3eee4;
+  --secondary-foreground: #1b3a2f;
+  --muted: #f3efe8;
+  --muted-foreground: #5a6863;
+  --accent: #ecf3ef;
+  --accent-foreground: #1e5a45;
+  --destructive: #c2413b;
+  --border: #e6dfd2;
+  --input: #d9d1c2;
+  --ring: #c29b4a;
+  --radius: 0.875rem;
+  /* Sticky header = emergency strip (desktop only) + main bar. Used to size first-screen sections. */
+  --header-h: 4.25rem;
+  --topbar-h: 0rem;
+  --header-total: calc(var(--header-h) + var(--topbar-h));
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --topbar-h: 2.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-total) + 1rem);
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* Never allow sideways scrolling on phones; `clip` (unlike `hidden`) keeps the sticky header working. */
+    overflow-x: clip;
+    font-feature-settings: "kern", "liga", "locl";
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-gold-light) 55%, transparent);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page { padding-inline: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .container-page { padding-inline: 2rem; }
+  }
+
+  /* Vertical rhythm that follows the screen height, so sections stay compact on 13-15" laptops. */
+  .section {
+    padding-block: clamp(3rem, 8vh, 6rem);
+  }
+  .section-sm {
+    padding-block: clamp(2.5rem, 6vh, 4.5rem);
+  }
+  /* Display headings: sized by both viewport width and height. */
+  .display-xl {
+    font-size: clamp(2.75rem, 1.9vw + 2.9vh, 4.8rem);
+    line-height: 1.04;
+  }
+  .display-lg {
+    font-size: clamp(1.95rem, 1.1vw + 1.8vh, 3rem);
+    line-height: 1.1;
+  }
+
+  .text-gold-gradient {
+    background: linear-gradient(115deg, #9c7129 0%, #c99a45 35%, #e8c878 55%, #b88a36 80%, #9c7129 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gold-gradient-animated {
+    animation: var(--animate-shimmer);
+  }
+  .bg-gold-gradient {
+    background: linear-gradient(120deg, #a87c2e 0%, #d4a955 40%, #e7c679 60%, #b98b38 100%);
+  }
+  .bg-marble {
+    background-color: var(--color-ivory);
+    background-image:
+      linear-gradient(rgb(251 249 245 / 0.62), rgb(251 249 245 / 0.62)),
+      radial-gradient(120% 80% at 10% 0%, rgb(255 255 255 / 0.9), transparent 60%),
+      radial-gradient(90% 70% at 100% 100%, rgb(233 225 210 / 0.55), transparent 65%),
+      url("/textures/marble.webp");
+    background-size: auto, auto, auto, cover;
+    background-position: center;
+  }
+  .bg-emerald-glow {
+    background-color: var(--color-emerald-deep);
+    background-image:
+      radial-gradient(80% 60% at 85% 0%, rgb(46 138 94 / 0.35), transparent 60%),
+      radial-gradient(60% 60% at 0% 100%, rgb(194 155 74 / 0.18), transparent 60%);
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[0.72rem] font-semibold tracking-[0.22em] uppercase text-gold-dark;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+  .hairline {
+    background: linear-gradient(90deg, transparent, var(--color-gold) 20%, var(--color-gold) 80%, transparent);
+    height: 1px;
+    opacity: 0.45;
+  }
+  .card-lift {
+    transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo), border-color 0.3s ease;
+  }
+  @media (hover: hover) {
+    .card-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px -24px rgb(15 51 40 / 0.28);
+    }
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .arch {
+    border-radius: 999px 999px 1.75rem 1.75rem;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .prose-clinic p + p { margin-top: 1rem; }
+}
+
+/* Scroll-driven reveal: zero JavaScript, progressive enhancement only. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+    .reveal-scale {
+      animation: grow-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+}
+
+/* Marquee */
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee .marquee-track {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+}
+
+/* MapLibre tweaks */
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
+}
