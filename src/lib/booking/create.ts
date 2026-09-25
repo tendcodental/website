@@ -141,7 +141,10 @@ export async function createBooking(
     }),
   ]);
 
-  if (upcoming.filter((e) => e.status !== "cancelled").length >= bookingConfig.maxUpcomingPerPhone) {
+  const sameDayUpcoming = upcoming.filter(
+    (e) => e.status !== "cancelled" && e.start.dateTime && clinicDate(new Date(e.start.dateTime)) === input.date,
+  );
+  if (sameDayUpcoming.length >= bookingConfig.maxUpcomingPerPhone) {
     return { ok: false, code: "DUPLICATE" };
   }
 

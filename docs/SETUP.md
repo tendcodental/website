@@ -79,7 +79,7 @@ Both doctors use **one calendar**. We recommend a dedicated calendar inside the 
 
 Bulgarian public holidays (including Orthodox Easter and the moved day off when a holiday falls on a weekend) are blocked automatically. Extra days off announced by the government → add an all-day event.
 
-**Booking rules** (in `src/lib/booking/config.ts`): 60-minute slots, Mon–Fri 09:00–18:00 per doctor (`schedule` in `src/content/doctors.ts`), same-day bookings at least 2 hours ahead, up to 60 days ahead, one upcoming online booking per phone number.
+**Booking rules** (in `src/lib/booking/config.ts`): 60-minute slots, Mon–Fri 09:00–18:00 per doctor (`schedule` in `src/content/doctors.ts`), same-day bookings at least 2 hours ahead, up to 60 days ahead, one online booking per phone number per day (a patient can still book a different day online; a second same-day slot needs a phone call).
 
 Two people can't book the same slot: the calendar event ID is derived from the slot, so Google rejects the second insert.
 

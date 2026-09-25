@@ -13,7 +13,7 @@ export const bookingConfig = {
    * for both doctors. Set to false if both doctors can see patients in parallel.
    */
   sharedChair: true,
-  /** Upcoming online bookings allowed per phone number. */
+  /** Upcoming online bookings allowed per phone number, on the same day. */
   maxUpcomingPerPhone: 1,
   /** Marker stored on events created by the website. */
   source: "tandco-website",
