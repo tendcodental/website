@@ -7,7 +7,6 @@ import { JsonLd, SectionHeading } from "@/components/shared/primitives";
 import { serviceCategories } from "@/content/services";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { getEmergencyPhones } from "@/lib/emergency";
 import { breadcrumbSchema } from "@/lib/schema";
 import { absoluteUrl, localizedPaths, pageMetadata } from "@/lib/seo";
 
@@ -30,7 +29,6 @@ export default async function ServicesPage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: "services" });
   const tn = await getTranslations({ locale, namespace: "nav" });
   const tc = await getTranslations({ locale, namespace: "common" });
-  const { phones } = await getEmergencyPhones();
 
   const home = absoluteUrl(localizedPaths({ bg: "/", en: "/" })[locale]);
   const self = absoluteUrl(localizedPaths({ bg: "/services", en: "/services" })[locale]);
@@ -118,7 +116,7 @@ export default async function ServicesPage({ params }: Props) {
         </div>
       </section>
 
-      <CtaBand locale={locale} phones={phones} />
+      <CtaBand locale={locale} />
     </>
   );
 }

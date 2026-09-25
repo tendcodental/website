@@ -48,7 +48,7 @@ export default async function HomePage({ params }: Props) {
       <Hero locale={locale} phones={phones} rating={reviews && !reviews.demo ? { value: reviews.rating, count: reviews.count } : null} />
       <BookingSection locale={locale} />
       <EmergencyBand locale={locale} phones={phones} />
-      <ServicesSection locale={locale} phones={phones} />
+      <ServicesSection locale={locale} />
       <TeamSection locale={locale} />
       <ReviewsSection locale={locale} data={reviews} />
       <AboutTeaser locale={locale} />

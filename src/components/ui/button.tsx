@@ -18,7 +18,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
-        gold: "bg-gold-gradient text-emerald-night font-semibold shadow-[0_10px_30px_-12px_rgb(168_124_46/0.7)] hover:brightness-[1.06] hover:shadow-[0_14px_34px_-12px_rgb(168_124_46/0.8)]",
+        gold: "border-0 bg-gold-gradient text-emerald-night font-semibold shadow-[0_10px_30px_-12px_rgb(168_124_46/0.7)] hover:brightness-[1.06] hover:shadow-[0_14px_34px_-12px_rgb(168_124_46/0.8)]",
         brand: "bg-emerald text-white font-semibold shadow-[0_10px_30px_-14px_rgb(15_51_40/0.8)] hover:bg-emerald-deep",
         glass:
           "border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 supports-[backdrop-filter]:bg-white/10",

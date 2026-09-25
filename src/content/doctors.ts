@@ -41,7 +41,7 @@ export const doctors: Doctor[] = [
     surname: { bg: "Бояджиев", en: "Boyadzhiev" },
     initials: "КБ",
     role: { bg: "Лекар по дентална медицина", en: "Dentist" },
-    phone: { display: "+359 888 000 101", tel: "+359888000101" },
+    phone: { display: "+359 878 931 480", tel: "+359878931480" },
     email: "boyadzhiev@tandcodental.com",
     photo: null,
     bio: {
@@ -64,12 +64,12 @@ export const doctors: Doctor[] = [
   },
   {
     id: "tairyumer",
-    name: { bg: "д-р Таирюмер Таирюмер", en: "Dr. Tairyumer Tairyumer" },
-    shortName: { bg: "д-р Таирюмер", en: "Dr. Tairyumer" },
-    surname: { bg: "Таирюмер", en: "Tairyumer" },
+    name: { bg: "д-р Таирюмер Таирюмер", en: "Dr. Tayrumer Tayrumer" },
+    shortName: { bg: "д-р Таирюмер", en: "Dr. Tayrumer" },
+    surname: { bg: "Таирюмер", en: "Tayrumer" },
     initials: "ТТ",
     role: { bg: "Лекар по дентална медицина", en: "Dentist" },
-    phone: { display: "+359 888 000 102", tel: "+359888000102" },
+    phone: { display: "+359 879 181 852", tel: "+359879181852" },
     email: "tairyumer@tandcodental.com",
     photo: "/images/dr-tairyumer.jpg",
     bio: {
@@ -78,8 +78,8 @@ export const doctors: Doctor[] = [
         "Приема възрастни и деца за прегледи, лечение, вадене на зъби и спешни състояния, като обяснява ясно възможностите и цената преди всяка процедура.",
       ],
       en: [
-        "Dr. Tairyumer combines a calm approach with precise work, especially valuable when a patient arrives in pain or feeling anxious.",
-        "Dr. Tairyumer treats adults and children, check-ups, treatment, extractions and emergencies, and clearly explains the options and cost before every procedure.",
+        "Dr. Tayrumer combines a calm approach with precise work, especially valuable when a patient arrives in pain or feeling anxious.",
+        "Dr. Tayrumer treats adults and children, check-ups, treatment, extractions and emergencies, and clearly explains the options and cost before every procedure.",
       ],
     },
     focus: {

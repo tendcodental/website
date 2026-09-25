@@ -40,7 +40,7 @@ export async function Hero({
         <div>
           <h1 className="animate-fade-up display-xl text-ink">
             <span className="block">{t("title1")}</span>
-            <em className="text-gold-gradient text-gold-gradient-animated block pr-1 font-semibold not-italic sm:italic">
+            <em className="text-gold-gradient text-gold-gradient-animated block pr-1 pb-1 font-semibold not-italic sm:italic">
               {t("title2")}
             </em>
           </h1>

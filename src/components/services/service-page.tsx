@@ -1,4 +1,5 @@
 import { ArrowUpRight, BadgeCheck, Check, Info, Phone } from "lucide-react";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ServiceArt } from "@/components/art/service-art";
 import { BookButton } from "@/components/shared/book-button";
@@ -106,22 +107,18 @@ export async function ServicePage({
                   <BookButton variant="soft">{tn("bookLong")}</BookButton>
                 </>
               ) : (
-                <>
-                  <BookButton>{tn("bookLong")}</BookButton>
-                  <a
-                    href={`tel:${phones[0]}`}
-                    className="inline-flex h-12 items-center justify-center gap-2.5 rounded-full border border-emerald/20 bg-white/80 px-6 font-semibold text-emerald hover:border-emerald/50 sm:h-13"
-                  >
-                    <Phone className="size-4" aria-hidden="true" /> {formatPhone(phones[0], locale)}
-                  </a>
-                </>
+                <BookButton>{tn("bookLong")}</BookButton>
               )}
             </div>
           </div>
           <div className="animate-rise relative aspect-[4/3] w-full lg:h-[clamp(15rem,calc(100svh-var(--header-total)-10rem),24rem)] lg:w-auto lg:justify-self-center">
             <div className="absolute -inset-3 rounded-[2.4rem] border border-gold/30" aria-hidden="true" />
             <div className="size-full overflow-hidden rounded-[2rem] shadow-[0_40px_80px_-40px_rgb(15_51_40/0.6)]">
-              <ServiceArt art={entry.art} label={text.title} className="size-full" />
+              {entry.thumbnail ? (
+                <Image src={entry.thumbnail} alt={text.title} width={768} height={576} className="size-full object-cover" />
+              ) : (
+                <ServiceArt art={entry.art} label={text.title} className="size-full" />
+              )}
             </div>
           </div>
         </div>
@@ -180,10 +177,20 @@ export async function ServicePage({
                         className="card-lift group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-white"
                       >
                         <span className="relative block overflow-hidden">
-                          <ServiceArt
-                            art={s.art}
-                            className="aspect-[16/9] transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
-                          />
+                          {s.thumbnail ? (
+                            <Image
+                              src={s.thumbnail}
+                              alt={s.text[locale].title}
+                              width={768}
+                              height={432}
+                              className="aspect-[16/9] w-full object-cover transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
+                            />
+                          ) : (
+                            <ServiceArt
+                              art={s.art}
+                              className="aspect-[16/9] transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
+                            />
+                          )}
                         </span>
                         <span className="flex flex-1 flex-col p-5 sm:p-6">
                           <span className="flex items-start justify-between gap-2 font-display text-[1.3rem] leading-tight font-semibold text-ink group-hover:text-emerald">
@@ -275,7 +282,7 @@ export async function ServicePage({
         </div>
       </section>
 
-      <CtaBand locale={locale} phones={phones} />
+      <CtaBand locale={locale} />
     </>
   );
 }

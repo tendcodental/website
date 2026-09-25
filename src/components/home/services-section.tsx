@@ -1,14 +1,14 @@
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { CategoryCard } from "@/components/services/service-card";
 import { BookButton } from "@/components/shared/book-button";
+import { DoctorCallLinks } from "@/components/shared/doctor-call-links";
 import { SectionHeading } from "@/components/shared/primitives";
 import { serviceCategories } from "@/content/services";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { formatPhone } from "@/lib/phone";
 
-export async function ServicesSection({ locale, phones }: { locale: Locale; phones: string[] }) {
+export async function ServicesSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "services" });
   const tc = await getTranslations({ locale, namespace: "common" });
   const tn = await getTranslations({ locale, namespace: "nav" });
@@ -46,12 +46,10 @@ export async function ServicesSection({ locale, phones }: { locale: Locale; phon
               <BookButton size="xl" className="w-full">
                 {tn("bookLong")}
               </BookButton>
-              <a
-                href={`tel:${phones[0]}`}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-              >
-                <Phone className="size-4" aria-hidden="true" /> {formatPhone(phones[0], locale)}
-              </a>
+              <DoctorCallLinks
+                locale={locale}
+                linkClassName="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/20 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              />
             </div>
           </div>
         </div>

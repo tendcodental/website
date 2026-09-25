@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import { ServiceArt } from "@/components/art/service-art";
 import { PulseDot } from "@/components/shared/primitives";
 import type { ServiceCategory } from "@/content/services";
@@ -34,17 +35,30 @@ export function CategoryCard({
       <div
         className={cn(
           "relative overflow-hidden",
-          featured && "bg-[linear-gradient(135deg,#154535,#0f3328_60%,#0a241c)] lg:flex lg:w-1/2 lg:shrink-0 lg:items-center",
+          featured && "bg-[linear-gradient(135deg,#154535,#0f3328_60%,#0a241c)] lg:w-1/2 lg:shrink-0",
         )}
       >
-        <ServiceArt
-          art={category.art}
-          fit={featured ? "contain" : "cover"}
-          className={cn(
-            "transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]",
-            featured ? "aspect-[4/3]" : "aspect-[16/10]",
-          )}
-        />
+        {category.thumbnail ? (
+          <Image
+            src={category.thumbnail}
+            alt={t.navTitle ?? t.title}
+            width={768}
+            height={featured ? 576 : 480}
+            className={cn(
+              "w-full object-cover transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]",
+              featured ? "aspect-[4/3] lg:aspect-auto lg:absolute lg:inset-0 lg:h-full" : "aspect-[16/10]",
+            )}
+          />
+        ) : (
+          <ServiceArt
+            art={category.art}
+            fit={featured ? "contain" : "cover"}
+            className={cn(
+              "transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]",
+              featured ? "aspect-[4/3] lg:aspect-auto lg:absolute lg:inset-0 lg:h-full" : "aspect-[16/10]",
+            )}
+          />
+        )}
         {category.urgent && (
           <span className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-[0.72rem] font-bold tracking-wide text-alert shadow-sm">
             <PulseDot /> 24/7

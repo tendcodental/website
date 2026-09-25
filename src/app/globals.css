@@ -218,8 +218,8 @@
   }
   /* Display headings: sized by both viewport width and height. */
   .display-xl {
-    font-size: clamp(2.75rem, 1.9vw + 2.9vh, 4.8rem);
-    line-height: 1.04;
+    font-size: clamp(3rem, 2.2vw + 3.2vh, 5.1rem);
+    line-height: 1.15;
   }
   .display-lg {
     font-size: clamp(1.95rem, 1.1vw + 1.8vh, 3rem);

@@ -3,6 +3,7 @@ import type { ServiceCategory } from "./types";
 export const preventive: ServiceCategory = {
   id: "preventive",
   art: "preventive",
+  thumbnail: "/images/services/preventive.jpg",
   text: {
     bg: {
       slug: "preventivna-i-detska-stomatologiya",
@@ -67,6 +68,7 @@ export const preventive: ServiceCategory = {
     {
       id: "pediatric",
       art: "kids",
+      thumbnail: "/images/services/pediatric.jpg",
       text: {
         bg: {
           slug: "detska-stomatologiya",
@@ -149,6 +151,7 @@ export const preventive: ServiceCategory = {
     {
       id: "fluoride",
       art: "fluoride",
+      thumbnail: "/images/services/fluoride.jpg",
       text: {
         bg: {
           slug: "fluorizatsiya-na-zabi",
@@ -218,6 +221,7 @@ export const preventive: ServiceCategory = {
     {
       id: "sealants",
       art: "sealant",
+      thumbnail: "/images/services/sealants.jpg",
       text: {
         bg: {
           slug: "zapechatvane-na-fisuri",

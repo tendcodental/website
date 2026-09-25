@@ -135,7 +135,7 @@ export default async function AboutPage({ params }: Props) {
         </div>
       </section>
 
-      <CtaBand locale={locale} phones={phones} />
+      <CtaBand locale={locale} />
     </>
   );
 }

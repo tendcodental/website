@@ -3,6 +3,7 @@ import type { ServiceCategory } from "./types";
 export const endodontics: ServiceCategory = {
   id: "endodontics",
   art: "endo",
+  thumbnail: "/images/services/endodontics.jpg",
   text: {
     bg: {
       slug: "endodontsko-i-terapevtichno-lechenie",
@@ -69,6 +70,7 @@ export const endodontics: ServiceCategory = {
     {
       id: "toothache",
       art: "toothache",
+      thumbnail: "/images/services/toothache.jpg",
       urgent: true,
       text: {
         bg: {
@@ -147,6 +149,7 @@ export const endodontics: ServiceCategory = {
     {
       id: "fillings",
       art: "filling",
+      thumbnail: "/images/services/fillings.jpg",
       text: {
         bg: {
           slug: "obturirane-plombirane-na-zabi",
@@ -222,6 +225,7 @@ export const endodontics: ServiceCategory = {
     {
       id: "root-canal",
       art: "root-canal",
+      thumbnail: "/images/services/root-canal.jpg",
       text: {
         bg: {
           slug: "endodontsko-lechenie",

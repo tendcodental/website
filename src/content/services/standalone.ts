@@ -3,6 +3,7 @@ import type { ServiceCategory } from "./types";
 export const cleaning: ServiceCategory = {
   id: "cleaning",
   art: "cleaning",
+  thumbnail: "/images/services/cleaning.jpg",
   children: [],
   text: {
     bg: {
@@ -79,6 +80,7 @@ export const cleaning: ServiceCategory = {
 export const crowns: ServiceCategory = {
   id: "crowns",
   art: "crown",
+  thumbnail: "/images/services/crowns.jpg",
   children: [],
   text: {
     bg: {

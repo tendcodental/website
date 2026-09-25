@@ -3,6 +3,7 @@ import type { ServiceCategory } from "./types";
 export const oralSurgery: ServiceCategory = {
   id: "oral-surgery",
   art: "surgery",
+  thumbnail: "/images/services/oral-surgery.jpg",
   text: {
     bg: {
       slug: "oralna-hirurgiya",
@@ -67,6 +68,7 @@ export const oralSurgery: ServiceCategory = {
     {
       id: "extraction",
       art: "extraction",
+      thumbnail: "/images/services/extraction.jpg",
       text: {
         bg: {
           slug: "izvazhdane-na-zabi",
@@ -152,6 +154,7 @@ export const oralSurgery: ServiceCategory = {
     {
       id: "maxillofacial",
       art: "jaw",
+      thumbnail: "/images/services/maxillofacial.jpg",
       text: {
         bg: {
           slug: "litsevo-chelyustna-hirurgiya",
@@ -229,6 +232,7 @@ export const oralSurgery: ServiceCategory = {
     {
       id: "wisdom-teeth",
       art: "wisdom",
+      thumbnail: "/images/services/wisdom-teeth.jpg",
       text: {
         bg: {
           slug: "retinirani-madretsi",
@@ -308,6 +312,7 @@ export const oralSurgery: ServiceCategory = {
     {
       id: "baby-teeth",
       art: "baby-tooth",
+      thumbnail: "/images/services/baby-teeth.jpg",
       text: {
         bg: {
           slug: "izvazhdane-na-mlechni-zabi",
@@ -380,6 +385,7 @@ export const oralSurgery: ServiceCategory = {
     {
       id: "emergency-oral-surgery",
       art: "surgery-urgent",
+      thumbnail: "/images/services/emergency-oral-surgery.jpg",
       urgent: true,
       text: {
         bg: {

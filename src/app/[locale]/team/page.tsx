@@ -6,7 +6,6 @@ import { JsonLd, SectionHeading } from "@/components/shared/primitives";
 import { DoctorCard } from "@/components/team/doctor-card";
 import { doctors } from "@/content/doctors";
 import type { Locale } from "@/i18n/routing";
-import { getEmergencyPhones } from "@/lib/emergency";
 import { allDoctorsSchema, breadcrumbSchema } from "@/lib/schema";
 import { absoluteUrl, localizedPaths, pageMetadata } from "@/lib/seo";
 
@@ -23,7 +22,6 @@ export default async function TeamPage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "team" });
   const tn = await getTranslations({ locale, namespace: "nav" });
-  const { phones } = await getEmergencyPhones();
   const url = absoluteUrl(localizedPaths({ bg: "/team", en: "/team" })[locale]);
 
   return (
@@ -50,7 +48,7 @@ export default async function TeamPage({ params }: Props) {
           ))}
         </div>
       </section>
-      <CtaBand locale={locale} phones={phones} />
+      <CtaBand locale={locale} />
     </>
   );
 }

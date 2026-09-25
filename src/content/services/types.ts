@@ -49,6 +49,7 @@ export interface ServiceText {
 export interface Service {
   id: string;
   art: ArtKey;
+  thumbnail?: string;
   /** Urgent services surface the 24/7 emergency line prominently. */
   urgent?: boolean;
   text: Localized<ServiceText>;

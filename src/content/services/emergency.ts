@@ -3,6 +3,7 @@ import type { ServiceCategory } from "./types";
 export const emergency: ServiceCategory = {
   id: "emergency",
   art: "emergency",
+  thumbnail: "/images/services/emergency.jpg",
   urgent: true,
   selfListing: { bg: "Спешна стоматологична помощ", en: "Emergency dental care" },
   text: {
@@ -127,6 +128,7 @@ export const emergency: ServiceCategory = {
     {
       id: "pulpitis",
       art: "pulp",
+      thumbnail: "/images/services/pulpitis.jpg",
       urgent: true,
       text: {
         bg: {
@@ -228,6 +230,7 @@ export const emergency: ServiceCategory = {
     {
       id: "abscess",
       art: "abscess",
+      thumbnail: "/images/services/abscess.jpg",
       urgent: true,
       text: {
         bg: {
@@ -337,6 +340,7 @@ export const emergency: ServiceCategory = {
     {
       id: "broken-tooth",
       art: "broken",
+      thumbnail: "/images/services/broken-tooth.jpg",
       urgent: true,
       text: {
         bg: {
@@ -430,6 +434,7 @@ export const emergency: ServiceCategory = {
     {
       id: "emergency-extraction",
       art: "extraction-urgent",
+      thumbnail: "/images/services/emergency-extraction.jpg",
       urgent: true,
       text: {
         bg: {
@@ -499,6 +504,7 @@ export const emergency: ServiceCategory = {
     {
       id: "foreign-body",
       art: "gums",
+      thumbnail: "/images/services/foreign-body.jpg",
       urgent: true,
       text: {
         bg: {

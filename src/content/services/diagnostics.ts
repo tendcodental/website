@@ -3,6 +3,7 @@ import type { ServiceCategory } from "./types";
 export const diagnostics: ServiceCategory = {
   id: "diagnostics",
   art: "diagnostics",
+  thumbnail: "/images/services/diagnostics.jpg",
   text: {
     bg: {
       slug: "diagnostika-i-obrazna-diagnostika",
@@ -67,6 +68,7 @@ export const diagnostics: ServiceCategory = {
     {
       id: "dental-images",
       art: "images",
+      thumbnail: "/images/services/dental-images.jpg",
       text: {
         bg: {
           slug: "zabni-snimki",
@@ -133,6 +135,7 @@ export const diagnostics: ServiceCategory = {
     {
       id: "periapical",
       art: "periapical",
+      thumbnail: "/images/services/periapical.jpg",
       text: {
         bg: {
           slug: "sektorna-zabna-snimka",
@@ -189,6 +192,7 @@ export const diagnostics: ServiceCategory = {
     {
       id: "x-ray",
       art: "xray",
+      thumbnail: "/images/services/xray.jpg",
       text: {
         bg: {
           slug: "zaben-rentgen",
@@ -255,6 +259,7 @@ export const diagnostics: ServiceCategory = {
     {
       id: "exam",
       art: "exam",
+      thumbnail: "/images/services/diagnostics.jpg",
       text: {
         bg: {
           slug: "dentalen-pregled-i-konsultatsiya",
