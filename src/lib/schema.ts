@@ -1,7 +1,9 @@
 import { clinic, SITE_URL } from "@/content/clinic";
 import { type Doctor, doctors } from "@/content/doctors";
+import type { Guide } from "@/content/guides";
 import { serviceCategories } from "@/content/services";
 import type { Locale } from "@/i18n/routing";
+import { env } from "./env";
 import { absoluteUrl, localizedPaths } from "./seo";
 
 /** Structured data (schema.org JSON-LD). */
@@ -11,6 +13,35 @@ export const EMERGENCY_ID = `${SITE_URL}/#emergency`;
 
 const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const ALL_DAYS = [...WEEKDAYS, "Saturday", "Sunday"];
+
+/** The clinic's Google Maps listing (Business Profile), from the Place ID also used for reviews. */
+export const googleMapsPlaceUrl = () =>
+  env.placeId ? `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(env.placeId)}` : undefined;
+
+/** Plovdiv plus the nearby towns and municipalities patients come from. */
+const AREAS: Record<Locale, Array<[type: "City" | "AdministrativeArea", name: string]>> = {
+  bg: [
+    ["City", "Пловдив"],
+    ["City", "Асеновград"],
+    ["City", "Стамболийски"],
+    ["City", "Раковски"],
+    ["City", "Куклен"],
+    ["AdministrativeArea", "Община Марица"],
+    ["AdministrativeArea", "Община Родопи"],
+    ["AdministrativeArea", "Област Пловдив"],
+  ],
+  en: [
+    ["City", "Plovdiv"],
+    ["City", "Asenovgrad"],
+    ["City", "Stamboliyski"],
+    ["City", "Rakovski"],
+    ["City", "Kuklen"],
+    ["AdministrativeArea", "Maritsa Municipality"],
+    ["AdministrativeArea", "Rodopi Municipality"],
+    ["AdministrativeArea", "Plovdiv Province"],
+  ],
+};
+const areaServed = (locale: Locale) => AREAS[locale].map(([type, name]) => ({ "@type": type, name }));
 
 function postalAddress(locale: Locale) {
   return {
@@ -31,6 +62,7 @@ export function clinicSchema(locale: Locale, phones: string[]) {
   const home = absoluteUrl(localizedPaths({ bg: "/", en: "/" })[locale]);
   const book = absoluteUrl(localizedPaths({ bg: "/book", en: "/book" })[locale]);
   const bg = locale === "bg";
+  const mapsUrl = googleMapsPlaceUrl();
 
   return {
     "@context": "https://schema.org",
@@ -39,8 +71,12 @@ export function clinicSchema(locale: Locale, phones: string[]) {
     name: clinic.name,
     alternateName: ["Т енд Ко Дентал", "T and Co Dental"],
     description: bg
-      ? "Зъболекарски кабинет в Пловдив и спешен денонощен зъболекарски кабинет 24/7. Работи с НЗОК, прави зъбни снимки на място и работи с кофердам."
-      : "Dental clinic in Plovdiv and 24/7 emergency dental clinic. NHIF contract, on-site dental X-rays and rubber dam isolation.",
+      ? "Денонощен и спешен зъболекар в Пловдив. Зъболекарски кабинет с дежурен лекар 24/7, включително нощем, в почивните дни и по празниците. Работи с НЗОК, прави зъбни снимки на място и работи с кофердам."
+      : "24/7 emergency dentist in Plovdiv. A dental clinic with a dentist on duty around the clock, including nights, weekends and public holidays. NHIF contract, on-site dental X-rays and rubber dam isolation.",
+    slogan: bg ? "Денонощен зъболекар в Пловдив" : "24/7 emergency dentist in Plovdiv",
+    keywords: bg
+      ? "денонощен зъболекар Пловдив, спешен зъболекар Пловдив, зъболекар Пловдив, спешна стоматологична помощ, НЗОК"
+      : "24/7 dentist Plovdiv, emergency dentist Plovdiv, dentist Plovdiv, emergency dental care, NHIF",
     url: home,
     logo: `${SITE_URL}/brand/logo.png`,
     image: [`${SITE_URL}${clinic.images.interior}`, `${SITE_URL}${clinic.images.entrance}`, `${SITE_URL}${clinic.images.logo}`],
@@ -48,8 +84,10 @@ export function clinicSchema(locale: Locale, phones: string[]) {
     email: clinic.email,
     address: postalAddress(locale),
     geo: { "@type": "GeoCoordinates", latitude: clinic.geo.lat, longitude: clinic.geo.lng },
-    hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("ул. Даме Груев 34, Пловдив")}`,
-    areaServed: { "@type": "City", name: clinic.address.city[locale] },
+    hasMap: mapsUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("ул. Даме Груев 34, Пловдив")}`,
+    areaServed: areaServed(locale),
+    priceRange: "$$",
+    currenciesAccepted: "EUR",
     medicalSpecialty: "https://schema.org/Dentistry",
     isAcceptingNewPatients: true,
     knowsLanguage: ["bg", "en"],
@@ -65,6 +103,10 @@ export function clinicSchema(locale: Locale, phones: string[]) {
       "@type": ["Dentist", "EmergencyService"],
       "@id": EMERGENCY_ID,
       name: bg ? "T&Co Dental: спешна денонощна зъболекарска помощ" : "T&Co Dental: 24/7 emergency dental care",
+      alternateName: bg
+        ? ["Денонощен зъболекар Пловдив", "Спешен зъболекар Пловдив"]
+        : ["24/7 dentist Plovdiv", "Emergency dentist Plovdiv"],
+      areaServed: areaServed(locale),
       telephone: phones[0],
       address: postalAddress(locale),
       openingHoursSpecification: {
@@ -74,7 +116,7 @@ export function clinicSchema(locale: Locale, phones: string[]) {
         closes: "23:59",
       },
     },
-    sameAs: [clinic.socials.facebook, clinic.socials.instagram],
+    sameAs: [clinic.socials.facebook, clinic.socials.instagram, clinic.socials.tiktok, ...(mapsUrl ? [mapsUrl] : [])],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: bg ? "Услуги" : "Services",
@@ -150,7 +192,7 @@ export function serviceSchema({
     serviceType: name,
     inLanguage: locale,
     provider: { "@id": urgent ? EMERGENCY_ID : CLINIC_ID },
-    areaServed: { "@type": "City", name: clinic.address.city[locale] },
+    areaServed: areaServed(locale),
     ...(urgent ? { hoursAvailable: { "@type": "OpeningHoursSpecification", dayOfWeek: ALL_DAYS, opens: "00:00", closes: "23:59" } } : {}),
   };
 }
@@ -170,3 +212,28 @@ export function doctorSchema(doctor: Doctor, locale: Locale, pageUrl: string) {
 }
 
 export const allDoctorsSchema = (locale: Locale, pageUrl: string) => doctors.map((d) => doctorSchema(d, locale, pageUrl));
+
+/** A patient guide: an Article about a health topic, published by the clinic. */
+export function guideSchema(guide: Guide, locale: Locale, url: string, reviewer?: Doctor) {
+  const text = guide.text[locale];
+  return {
+    "@context": "https://schema.org",
+    "@type": ["Article", "MedicalWebPage"],
+    "@id": `${url}#article`,
+    headline: text.title,
+    description: text.metaDescription,
+    abstract: text.answer,
+    url,
+    mainEntityOfPage: url,
+    inLanguage: locale,
+    ...(guide.thumbnail ? { image: `${SITE_URL}${guide.thumbnail}` } : {}),
+    datePublished: guide.published,
+    dateModified: guide.updated,
+    lastReviewed: guide.updated,
+    audience: { "@type": "PeopleAudience", audienceType: locale === "bg" ? "Пациенти" : "Patients" },
+    author: reviewer ? { "@id": `${SITE_URL}/#${reviewer.id}`, "@type": "Person", name: reviewer.name[locale] } : { "@id": CLINIC_ID },
+    ...(reviewer ? { reviewedBy: { "@id": `${SITE_URL}/#${reviewer.id}`, "@type": "Person", name: reviewer.name[locale] } } : {}),
+    publisher: { "@id": CLINIC_ID },
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+  };
+}

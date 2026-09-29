@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { guides } from "@/content/guides";
 import { serviceCategories } from "@/content/services";
 import type { ArtKey } from "@/content/services";
 import type { Locale } from "@/i18n/routing";
@@ -37,7 +38,7 @@ export function buildServicesMenu(locale: Locale): MenuCategory[] {
   });
 }
 
-/** bg-slug ↔ en-slug lookup for the language switcher on service pages. */
+/** bg-slug ↔ en-slug lookup for the language switcher on service and guide pages. */
 export function buildSlugMap() {
   const map: Record<Locale, Record<string, string>> = { bg: {}, en: {} };
   for (const c of serviceCategories) {
@@ -47,6 +48,10 @@ export function buildSlugMap() {
       map.bg[s.text.bg.slug] = s.text.en.slug;
       map.en[s.text.en.slug] = s.text.bg.slug;
     }
+  }
+  for (const g of guides) {
+    map.bg[g.text.bg.slug] = g.text.en.slug;
+    map.en[g.text.en.slug] = g.text.bg.slug;
   }
   return map;
 }

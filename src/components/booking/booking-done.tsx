@@ -3,6 +3,7 @@
 import { CalendarPlus, Download, Phone } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
+import { useSite } from "@/components/providers/site-provider";
 import { reasonById } from "@/content/booking";
 import { fullAddress } from "@/content/clinic";
 import { doctorById } from "@/content/doctors";
@@ -10,6 +11,7 @@ import type { Locale } from "@/i18n/routing";
 import { buildIcs, googleCalendarLink } from "@/lib/booking/ics";
 import { addMinutesToTime } from "@/lib/booking/time";
 import type { BookingSuccess } from "@/lib/booking/types";
+import { formatPhone } from "@/lib/phone";
 import { DoctorAvatar } from "./doctor-avatar";
 
 export function BookingDone({
@@ -23,7 +25,14 @@ export function BookingDone({
 }) {
   const t = useTranslations("booking");
   const locale = useLocale() as Locale;
+  const { phones } = useSite();
   const doctor = result ? doctorById(result.doctorId) : undefined;
+  // Doctors without a public number of their own (see doctors.ts) point patients to the clinic's
+  // emergency line instead.
+  const contactPhone =
+    doctor && doctor.showPhone === false
+      ? { tel: phones[0], display: formatPhone(phones[0], locale) }
+      : doctor?.phone;
 
   const longDate = useMemo(() => {
     if (!result) return "";
@@ -38,15 +47,15 @@ export function BookingDone({
   }, [result, locale]);
 
   const calendar = useMemo(() => {
-    if (!result || !doctor) return null;
+    if (!result || !doctor || !contactPhone) return null;
     const title = t("calendarTitle", { doctor: doctor.shortName[locale] });
-    const description = `${reasonById(result.reasonId)?.label[locale] ?? ""}\n${t("doneCall", { phone: doctor.phone.display })}`;
+    const description = `${reasonById(result.reasonId)?.label[locale] ?? ""}\n${t("doneCall", { phone: contactPhone.display })}`;
     const location = fullAddress(locale);
     return {
       google: googleCalendarLink({ start: result.start, end: result.end, title, description, location }),
       ics: `data:text/calendar;charset=utf-8,${encodeURIComponent(buildIcs({ uid: `${result.start}-${doctor.id}`, start: result.start, end: result.end, title, description, location }))}`,
     };
-  }, [result, doctor, locale, t]);
+  }, [result, doctor, contactPhone, locale, t]);
 
 
   return (
@@ -122,13 +131,13 @@ export function BookingDone({
         </div>
       )}
 
-      {doctor && (
+      {contactPhone && (
         <p className="mt-6 inline-flex items-center gap-2 text-sm text-muted-foreground">
           <Phone className="size-4 text-gold-dark" aria-hidden="true" />
           <span>
             {t("changeLabel")}{" "}
-            <a href={`tel:${doctor.phone.tel}`} className="font-semibold text-emerald">
-              {doctor.phone.display}
+            <a href={`tel:${contactPhone.tel}`} className="font-semibold text-emerald">
+              {contactPhone.display}
             </a>
           </span>
         </p>

@@ -62,7 +62,7 @@ export async function ContactDetails({ locale, phones }: { locale: Locale; phone
           <dl className="space-y-0.5 text-[0.93rem]">
             <div className="flex justify-between gap-4">
               <dt className="text-muted-foreground">{t("weekdays")}</dt>
-              <dd className="font-semibold">9:00 - 18:00</dd>
+              <dd className="font-semibold">9:00 - 20:00</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-muted-foreground">{t("weekend")}</dt>

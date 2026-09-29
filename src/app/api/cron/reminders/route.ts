@@ -52,7 +52,7 @@ export async function GET(request: Request) {
       nzok: p.nzok === "1",
       locale: p.locale === "en" ? "en" : "bg",
     };
-    if (await sendEmail(patientReminderEmail(booking))) {
+    if (await sendEmail(await patientReminderEmail(booking))) {
       await calendar.patch(ev.id, { extendedProperties: { private: { ...p, reminderSent: "1" } } });
       sent++;
     }

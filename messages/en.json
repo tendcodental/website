@@ -1,8 +1,8 @@
 {
   "meta": {
     "siteName": "T&Co Dental",
-    "homeTitle": "T&Co Dental | Dentist in Plovdiv, 24/7 Emergency Care",
-    "homeDescription": "24/7 emergency dental clinic in Plovdiv, Bulgaria. Check-ups and treatment (NHIF accepted), on-site X-rays and rubber dam isolation. Book online in a minute.",
+    "homeTitle": "24/7 Emergency Dentist in Plovdiv | T&Co Dental",
+    "homeDescription": "24/7 emergency dentist in Plovdiv, Bulgaria. We see emergency patients around the clock, including nights and holidays. NHIF accepted, book online in a minute.",
     "servicesTitle": "Services",
     "servicesDescription": "24/7 emergency care, oral surgery, root canals and fillings, children's dentistry, dental X-rays, scaling and crowns at T&Co Dental in Plovdiv.",
     "aboutTitle": "About us",
@@ -15,7 +15,9 @@
     "bookDescription": "Choose a dentist, a day and a free time. Booking takes under a minute and is confirmed instantly. T&Co Dental, Plovdiv.",
     "privacyTitle": "Privacy policy",
     "privacyDescription": "How T&Co Dental processes and protects your personal data when you book an appointment or contact us.",
-    "notFoundTitle": "Page not found"
+    "notFoundTitle": "Page not found",
+    "guidesTitle": "Dental Advice from a Dentist",
+    "guidesDescription": "What to do about toothache at night, swelling, a knocked-out tooth or bleeding after an extraction. Practical advice from T&Co Dental, the 24/7 dental clinic in Plovdiv."
   },
   "nav": {
     "home": "Home",
@@ -33,7 +35,8 @@
     "language": "Language",
     "switchTo": "Български",
     "breadcrumb": "Breadcrumb",
-    "mainNav": "Main navigation"
+    "mainNav": "Main navigation",
+    "guides": "Guides"
   },
   "emergency": {
     "badge": "24/7 emergency dental clinic",
@@ -68,7 +71,7 @@
     "title2": "day and night.",
     "lead": "A modern dental clinic in Plovdiv: check-ups and treatment with NHIF, on-site X-rays and rubber dam isolation. And for severe pain, swelling or injury, a dentist is on duty at any hour, including nights and weekends.",
     "ctaBook": "Book online",
-    "imageAlt": "The T&Co Dental treatment room: dental chair, modern equipment and a bright space",
+    "imageAlt": "The T&Co Dental team at the clinic entrance in Plovdiv",
     "cardOnDuty": "Dentist on duty",
     "cardOnDutyText": "We answer 24/7",
     "ctaPhone": "Emergency phone",
@@ -83,6 +86,8 @@
     "nzokText": "During regular hours we see insured patients under our contract with the NHIF.",
     "xrayTitle": "On-site X-rays",
     "xrayText": "Dental X-rays are taken in the clinic, so the diagnosis is clear at your very first visit.",
+    "heroXrayTitle": "X-ray diagnostics",
+    "heroXrayText": "A dental X-ray is part of the examination, so the diagnosis is accurate and clear from your very first visit.",
     "damTitle": "Rubber dam isolation",
     "damText": "We isolate the tooth during treatment: cleaner, safer and longer-lasting."
   },
@@ -158,6 +163,8 @@
   "services": {
     "title": "Everything for a healthy smile in one place",
     "lead": "From a routine check-up to emergency care in the middle of the night. Explore our services and find what you need.",
+    "seeAll": "See all services",
+    "seeLess": "Show fewer",
     "pageTitle": "Our services",
     "pageLead": "We treat, prevent and help in emergencies with on-site X-rays, rubber dam isolation and a clear explanation of every step.",
     "signs": "When to see us",
@@ -170,11 +177,12 @@
     "urgentText": "Don't wait for a free slot, call the emergency number. We work around the clock, including weekends and public holidays.",
     "ctaTitle": "Let us take care of your smile",
     "ctaText": "Book online in a minute or give us a call. We'll help you choose the right treatment.",
-    "nzokNote": "During regular hours we work with the NHIF. Ask us which treatments are covered in your case."
+    "nzokNote": "During regular hours we work with the NHIF. Ask us which treatments are covered in your case.",
+    "guides": "Helpful guides"
   },
   "team": {
     "title": "The dentists who'll look after you",
-    "lead": "Two dentists, one approach: attention, an accurate diagnosis and treatment without surprises.",
+    "lead": "Three dentists, one approach: attention, an accurate diagnosis and treatment without surprises.",
     "bookWith": "Book with {name}",
     "call": "Call",
     "write": "Email",
@@ -235,6 +243,7 @@
   },
   "about": {
     "title": "A modern clinic, calm care",
+    "pageTitle": "A great team, professional care",
     "lead": "T&Co Dental is a dental clinic in Plovdiv built around one idea: every patient deserves an accurate diagnosis, a clear explanation and quality treatment, and should never be left without help when they're in pain.",
     "storyTitle": "Our approach",
     "story1": "Every treatment starts with a conversation and an accurate diagnosis. We have an X-ray unit in the clinic, so images are taken during your examination, and at your very first visit you know what's going on and what your options are.",
@@ -252,6 +261,7 @@
       "availabilityText": "Round-the-clock emergency care and online booking in a minute."
     },
     "galleryAlt": "Inside T&Co Dental",
+    "teamAlt": "The T&Co Dental team of dentists",
     "statsEmergency": "emergency care",
     "statsNzok": "NHIF contract",
     "statsXray": "on-site X-ray",
@@ -275,5 +285,19 @@
   "privacy": {
     "title": "Privacy policy",
     "updated": "Last updated: {date}"
+  },
+  "guides": {
+    "pageTitle": "Practical advice from your dentist",
+    "pageLead": "Short, clear answers to the questions patients call us about most: what to do in the first few minutes, when it's urgent and when it can wait until morning.",
+    "readGuide": "Read",
+    "updated": "Updated: {date}",
+    "reviewedBy": "Reviewed by {name}",
+    "authorClinic": "The T&Co Dental team",
+    "urgentTitle": "Call us straight away if",
+    "urgentText": "The emergency line answers 24/7, including nights, weekends and public holidays.",
+    "relatedServices": "Related services",
+    "moreGuides": "More guides",
+    "faq": "Frequently asked questions",
+    "disclaimer": "This advice is general information and doesn't replace an examination. For severe pain, swelling or an injury, call our emergency number."
   }
 }

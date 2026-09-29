@@ -10,13 +10,13 @@ export const emergency: ServiceCategory = {
     bg: {
       slug: "speshna-stomatologichna-pomosht",
       title: "Спешна стоматологична помощ",
-      metaTitle: "Спешна стоматологична помощ 24/7 в Пловдив",
+      metaTitle: "Спешен зъболекар в Пловдив 24/7 | Денонощна помощ",
       metaDescription:
-        "Силна болка, подуване или счупен зъб? T&Co Dental е спешен денонощен зъболекарски кабинет в Пловдив. Обадете се по всяко време и дежурен лекар ще ви приеме.",
+        "Спешен и денонощен зъболекар в Пловдив. Силна болка, подуване или счупен зъб? Обадете се по всяко време, включително нощем и по празниците, и дежурен лекар ще ви приеме.",
       excerpt:
         "Денонощна помощ при силна болка, подуване, травма или счупен зъб, включително през нощта, в почивните дни и по празниците.",
       intro: [
-        "Зъбната болка рядко идва в удобен момент. Затова T&Co Dental работи като спешен денонощен зъболекарски кабинет 24/7: обадете се на спешния номер и дежурният лекар ще ви каже какво да направите веднага и кога да дойдете. При нужда идваме в кабинета и през нощта.",
+        "Търсите спешен зъболекар в Пловдив? Зъбната болка рядко идва в удобен момент, затова T&Co Dental работи като денонощен зъболекар 24/7: обадете се на спешния номер и дежурният лекар ще ви каже какво да направите веднага и кога да дойдете. При нужда идваме в кабинета и през нощта.",
         "Разполагаме с рентген, така че можем да направим зъбна снимка на място и да поставим точна диагноза още при първото посещение. Целта на спешното посещение е да спрем болката и инфекцията и да запазим зъба, когато това е възможно.",
       ],
       signsTitle: "Кога да се обадите веднага",
@@ -63,18 +63,30 @@ export const emergency: ServiceCategory = {
           q: "Мога ли да взема обезболяващо, докато чакам?",
           a: "Обикновено да, приемете обичайното обезболяващо, което понасяте, според листовката. Не поставяйте таблетки директно върху венеца и не затопляйте бузата; при подуване е по-добре студен компрес отвън.",
         },
+        {
+          q: "Има ли денонощен зъболекар в Пловдив?",
+          a: "Да. T&Co Dental на ул. „Даме Груев“ 34 в Пловдив е денонощен зъболекарски кабинет: спешният телефон отговаря 24 часа в денонощието, 7 дни в седмицата, и дежурен лекар приема пациенти по спешност и през нощта.",
+        },
+        {
+          q: "Приемате ли спешни случаи в събота, неделя и по празниците?",
+          a: "Да. Спешната помощ работи и в почивните дни, и по официалните празници. Обадете се на спешния номер и дежурният лекар ще уговори с вас кога да дойдете.",
+        },
+        {
+          q: "Колко струва спешен преглед?",
+          a: "Цената зависи от часа и от това какво лечение е нужно. Дежурният лекар ще ви я каже по телефона или преди да започне лечение, без изненади.",
+        },
       ],
     },
     en: {
       slug: "emergency-dental-care",
       title: "Emergency Dental Care",
-      metaTitle: "24/7 Emergency Dentist in Plovdiv",
+      metaTitle: "Emergency Dentist in Plovdiv, Open 24/7",
       metaDescription:
         "Severe toothache, swelling or a broken tooth? T&Co Dental is a 24/7 emergency dental clinic in Plovdiv. Call any time and the dentist on duty will see you.",
       excerpt:
         "Round-the-clock help for severe pain, swelling, injuries or a broken tooth, including nights, weekends and public holidays.",
       intro: [
-        "Toothache rarely strikes at a convenient time. That's why T&Co Dental operates as a 24/7 emergency dental clinic: call the emergency number and the dentist on duty will tell you what to do right away and when to come in, at night too, if needed.",
+        "Looking for an emergency dentist in Plovdiv? Toothache rarely strikes at a convenient time, so T&Co Dental operates as a 24/7 emergency dental clinic: call the emergency number and the dentist on duty will tell you what to do right away and when to come in, at night too, if needed.",
         "We have an X-ray unit in the clinic, so we can take a dental X-ray on the spot and make an accurate diagnosis during the first visit. The goal of an emergency visit is to stop the pain and the infection, and to save the tooth whenever possible.",
       ],
       signsTitle: "Call us straight away if you have",
@@ -120,6 +132,18 @@ export const emergency: ServiceCategory = {
         {
           q: "Can I take a painkiller while I wait?",
           a: "Usually yes, take your usual painkiller according to the leaflet. Don't put tablets directly on the gum and don't warm the cheek; for swelling, a cold compress on the outside is better.",
+        },
+        {
+          q: "Is there a 24-hour dentist in Plovdiv?",
+          a: "Yes. T&Co Dental at 34 Dame Gruev St. in Plovdiv is a 24/7 dental clinic: the emergency line answers 24 hours a day, 7 days a week, and the dentist on duty sees emergency patients at night too.",
+        },
+        {
+          q: "Do you see emergencies on weekends and public holidays?",
+          a: "Yes. Emergency care runs on weekends and on public holidays. Call the emergency number and the dentist on duty will arrange when to come in.",
+        },
+        {
+          q: "How much does an emergency visit cost?",
+          a: "It depends on the time and the treatment needed. The dentist on duty will tell you the price on the phone or before starting any treatment, with no surprises.",
         },
       ],
     },

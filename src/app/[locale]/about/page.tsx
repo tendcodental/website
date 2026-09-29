@@ -58,11 +58,11 @@ export default async function AboutPage({ params }: Props) {
         <div className="container-page grid items-center gap-10 pt-6 pb-10 lg:grid-cols-2 lg:gap-12 lg:pt-8 lg:pb-14">
           <div>
             <Breadcrumbs label={tn("breadcrumb")} items={[{ name: tn("home"), href: "/" }, { name: tn("about") }]} />
-            <SectionHeading as="h1" title={t("title")} lead={t("lead")} className="mt-6" />
+            <SectionHeading as="h1" title={t("pageTitle")} lead={t("lead")} className="mt-6" />
           </div>
           <div className="animate-rise relative mx-auto aspect-[4/4.4] w-full max-w-[22rem] sm:max-w-md lg:h-[clamp(20rem,calc(100svh-var(--header-total)-6rem),34rem)] lg:w-auto lg:max-w-none lg:justify-self-center">
             <div className="arch relative size-full overflow-hidden shadow-[0_50px_90px_-45px_rgb(15_51_40/0.6)]">
-              <Image src={clinic.images.interior} alt={t("galleryAlt")} fill loading="eager" fetchPriority="high" sizes="(min-width: 1024px) 45vw, 92vw" className="object-cover object-[50%_65%]" />
+              <Image src={clinic.images.team} alt={t("teamAlt")} fill loading="eager" fetchPriority="high" sizes="(min-width: 1024px) 45vw, 92vw" className="object-cover object-[50%_35%]" />
             </div>
           </div>
         </div>

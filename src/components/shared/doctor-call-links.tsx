@@ -19,7 +19,7 @@ export function DoctorCallLinks({
 }) {
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      {doctors.map((doctor) => (
+      {doctors.filter((d) => d.showPhone !== false).map((doctor) => (
         <a key={doctor.id} href={`tel:${doctor.phone.tel}`} className={linkClassName}>
           <Phone className="size-4 shrink-0" aria-hidden="true" />
           <span className="truncate">

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 /** Fallback for requests outside the localised routes (rare, most 404s use app/[locale]/not-found). */
 export default function GlobalNotFound() {
   return (
-    <html lang="bg">
+    <html lang="bg" data-scroll-behavior="smooth">
       <body className="grid min-h-dvh place-items-center bg-[#fbf9f5] p-6 text-center font-sans text-[#13231d]">
         <main>
           <p className="text-sm tracking-[0.3em] text-[#8a6420] uppercase">404</p>

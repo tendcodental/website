@@ -144,6 +144,9 @@ export function MobileMenu({ menu, slugMap }: { menu: MenuCategory[]; slugMap: R
               <a href={clinic.socials.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">
                 Instagram
               </a>
+              <a href={clinic.socials.tiktok} target="_blank" rel="noopener noreferrer" className="hover:text-emerald">
+                TikTok
+              </a>
             </div>
           </div>
         </div>

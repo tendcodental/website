@@ -4,12 +4,20 @@ import type { Localized } from "./clinic";
 export const generalFaq: Localized<{ q: string; a: string }[]> = {
   bg: [
     {
+      q: "Има ли денонощен зъболекар в Пловдив?",
+      a: "Да. T&Co Dental е денонощен и спешен зъболекарски кабинет в Пловдив, на ул. „Даме Груев“ 34 (район Южен). Спешният телефон отговаря 24/7, включително през нощта, в почивните дни и по празниците, а дежурен лекар приема пациенти по спешност.",
+    },
+    {
       q: "Как да запазя час?",
       a: "Изберете лекар, ден и свободен час в онлайн календара на сайта, часът се потвърждава веднага. Можете да се обадите и по телефона.",
     },
     {
       q: "Какво да направя при силна болка през нощта или в почивен ден?",
       a: "Обадете се на спешния ни номер. T&Co Dental е спешен денонощен зъболекарски кабинет 24/7: дежурен лекар ще ви каже какво да направите и ще ви приеме възможно най-бързо, включително през нощта.",
+    },
+    {
+      q: "Къде се намира кабинетът?",
+      a: "На ул. „Даме Груев“ 34 в Пловдив, район Южен. На страницата „Контакти“ ще намерите карта и упътване с Google Maps и Waze.",
     },
     {
       q: "Работите ли с НЗОК?",
@@ -34,12 +42,20 @@ export const generalFaq: Localized<{ q: string; a: string }[]> = {
   ],
   en: [
     {
+      q: "Is there a 24-hour emergency dentist in Plovdiv?",
+      a: "Yes. T&Co Dental is a 24/7 emergency dental clinic in Plovdiv, at 34 Dame Gruev St. (Yuzhen district). The emergency line answers around the clock, including nights, weekends and public holidays, and the dentist on duty sees emergency patients.",
+    },
+    {
       q: "How do I book an appointment?",
       a: "Choose a dentist, a day and a free time in the online calendar on this website, your appointment is confirmed instantly. You can also call us.",
     },
     {
       q: "What should I do if I'm in severe pain at night or on a weekend?",
       a: "Call our emergency number. T&Co Dental is a 24/7 emergency dental clinic: the dentist on duty will tell you what to do and see you as soon as possible, including at night.",
+    },
+    {
+      q: "Where is the clinic?",
+      a: "At 34 Dame Gruev St. in Plovdiv's Yuzhen district. The Contact page has a map and directions for Google Maps and Waze.",
     },
     {
       q: "Do you work with the NHIF (НЗОК)?",

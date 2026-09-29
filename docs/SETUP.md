@@ -79,7 +79,7 @@ Both doctors use **one calendar**. We recommend a dedicated calendar inside the 
 
 Bulgarian public holidays (including Orthodox Easter and the moved day off when a holiday falls on a weekend) are blocked automatically. Extra days off announced by the government → add an all-day event.
 
-**Booking rules** (in `src/lib/booking/config.ts`): 60-minute slots, Mon–Fri 09:00–18:00 per doctor (`schedule` in `src/content/doctors.ts`), same-day bookings at least 2 hours ahead, up to 60 days ahead, one online booking per phone number per day (a patient can still book a different day online; a second same-day slot needs a phone call).
+**Booking rules** (in `src/lib/booking/config.ts`): 60-minute slots, Mon–Fri 09:00–20:00 per doctor (`schedule` in `src/content/doctors.ts`), same-day bookings at least 2 hours ahead, up to 60 days ahead, one online booking per phone number per day (a patient can still book a different day online; a second same-day slot needs a phone call).
 
 Two people can't book the same slot: the calendar event ID is derived from the slot, so Google rejects the second insert.
 
@@ -175,11 +175,13 @@ Region is set to Frankfurt (`fra1`), close to Bulgaria. Preview deployments auto
 - Name exactly **T&Co Dental**; address **ул. „Даме Груев“ 34, Пловдив**, identical to the website.
 - Primary category **Dentist (Зъболекар)**. Add **Emergency dental service** if it's offered in the category list.
 - Website `https://tandcodental.com`; booking link `https://tandcodental.com/zapazi-chas`.
-- Regular hours Mon–Fri 9:00–18:00. Describe the 24/7 emergency service in the description and posts.
+- Regular hours Mon–Fri 9:00–20:00. Describe the 24/7 emergency service in the description and posts.
 - Upload real photos (entrance, treatment room, team) and ask happy patients for reviews. The site has a "Оставете отзив" button once the Place ID is set.
 - Keep name/address/phone identical on Facebook, Instagram and directories.
 
-**Structured data** is already on the pages: Dentist + EmergencyService (24/7), opening hours, address, geo, sameAs, services, breadcrumbs, FAQ, doctors. Test any page at <https://search.google.com/test/rich-results>.
+**Structured data** is already on the pages: Dentist + EmergencyService (24/7), opening hours, address, geo, sameAs, services, breadcrumbs, FAQ, doctors, guides. Test any page at <https://search.google.com/test/rich-results>.
+
+**IndexNow and AI assistants.** After each production deploy, run `npm run indexnow` to ping Bing, which feeds ChatGPT Search and Copilot, with every sitemap URL. The key file is `public/2c9b0670652bb54eedde33fcba3cda88.txt`. `/llms.txt` and `/llms-full.txt` are generated automatically. The full SEO and AI-visibility checklist is in [SEO.md](SEO.md).
 
 ---
 

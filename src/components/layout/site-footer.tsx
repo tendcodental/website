@@ -2,7 +2,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/logo";
 import { PulseDot } from "@/components/shared/primitives";
-import { FacebookIcon, InstagramIcon } from "@/components/shared/social-links";
+import { FacebookIcon, InstagramIcon, TikTokIcon } from "@/components/shared/social-links";
 import { clinic, fullAddress, mapLinks } from "@/content/clinic";
 import { serviceCategories } from "@/content/services";
 import { Link } from "@/i18n/navigation";
@@ -43,6 +43,15 @@ export async function SiteFooter({ locale, phones }: { locale: Locale; phones: s
             >
               <InstagramIcon className="size-4" />
             </a>
+            <a
+              href={clinic.socials.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="grid size-10 place-items-center rounded-full bg-[#010101] text-white ring-1 ring-white/25 transition-[filter] hover:brightness-125"
+              aria-label="TikTok"
+            >
+              <TikTokIcon className="size-4" />
+            </a>
           </div>
         </div>
 
@@ -67,6 +76,7 @@ export async function SiteFooter({ locale, phones }: { locale: Locale; phones: s
           <ul className="mt-5 space-y-2.5 text-[0.93rem]">
             <li><Link href="/about" className="transition-colors hover:text-white">{tn("about")}</Link></li>
             <li><Link href="/team" className="transition-colors hover:text-white">{tn("team")}</Link></li>
+            <li><Link href="/guides" className="transition-colors hover:text-white">{tn("guides")}</Link></li>
             <li><Link href="/contact" className="transition-colors hover:text-white">{tn("contact")}</Link></li>
             <li><Link href="/book" className="transition-colors hover:text-white">{tn("bookLong")}</Link></li>
             <li><Link href="/privacy" className="transition-colors hover:text-white">{t("privacy")}</Link></li>
@@ -104,7 +114,7 @@ export async function SiteFooter({ locale, phones }: { locale: Locale; phones: s
             <li className="flex gap-3">
               <Clock className="mt-0.5 size-4 shrink-0 text-gold-light" aria-hidden="true" />
               <p>
-                {tc("weekdays")}: 9:00 - 18:00
+                {tc("weekdays")}: 9:00 - 20:00
                 <br />
                 <span className="text-emerald-50/60">{tc("emergencyOnly")}: 24/7</span>
               </p>

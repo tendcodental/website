@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     const booking = result.booking;
     after(async () => {
       const jobs = [sendEmail({ ...clinicNotificationEmail(booking), to: env.clinicInbox })];
-      if (booking.email) jobs.push(sendEmail(patientConfirmationEmail(booking)));
+      if (booking.email) jobs.push(patientConfirmationEmail(booking).then(sendEmail));
       await Promise.allSettled(jobs);
     });
 

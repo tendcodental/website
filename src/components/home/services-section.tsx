@@ -4,9 +4,15 @@ import { CategoryCard } from "@/components/services/service-card";
 import { BookButton } from "@/components/shared/book-button";
 import { DoctorCallLinks } from "@/components/shared/doctor-call-links";
 import { SectionHeading } from "@/components/shared/primitives";
+import { ServicesGrid } from "@/components/home/services-grid";
 import { serviceCategories } from "@/content/services";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
+
+/** Service cards shown on phones before "see all"; the rest hide until expanded. */
+const MOBILE_VISIBLE = 3;
+const HIDE_WHEN_COLLAPSED = "max-md:group-data-[collapsed=true]/svc:hidden";
 
 export async function ServicesSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "services" });
@@ -26,7 +32,7 @@ export async function ServicesSection({ locale }: { locale: Locale }) {
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:mt-10 lg:grid-cols-3">
+        <ServicesGrid seeAll={t("seeAll")} seeLess={t("seeLess")}>
           {serviceCategories.map((c, i) => (
             <CategoryCard
               key={c.id}
@@ -34,10 +40,15 @@ export async function ServicesSection({ locale }: { locale: Locale }) {
               locale={locale}
               featured={i === 0}
               readMore={tc("readMore")}
-              className={i === 0 ? "md:col-span-2" : undefined}
+              className={cn(i === 0 && "md:col-span-2", i >= MOBILE_VISIBLE && HIDE_WHEN_COLLAPSED)}
             />
           ))}
-          <div className="reveal flex flex-col justify-between rounded-3xl bg-emerald-deep p-7 text-ivory">
+          <div
+            className={cn(
+              "reveal flex flex-col justify-between rounded-3xl bg-emerald-deep p-7 text-ivory",
+              HIDE_WHEN_COLLAPSED,
+            )}
+          >
             <div>
               <h3 className="text-[1.6rem] leading-tight text-ivory">{t("ctaTitle")}</h3>
               <p className="mt-3 text-[0.97rem] leading-relaxed text-emerald-50/75">{t("ctaText")}</p>
@@ -52,7 +63,7 @@ export async function ServicesSection({ locale }: { locale: Locale }) {
               />
             </div>
           </div>
-        </div>
+        </ServicesGrid>
       </div>
     </section>
   );

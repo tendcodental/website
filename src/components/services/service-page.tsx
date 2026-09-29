@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { CtaBand } from "@/components/shared/cta-band";
 import { FaqList } from "@/components/shared/faq-list";
 import { JsonLd, PulseDot } from "@/components/shared/primitives";
+import { guidesForService } from "@/content/guides";
 import { type Service, type ServiceCategory, serviceCategories } from "@/content/services";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -68,6 +69,7 @@ export async function ServicePage({
 
   const siblings = service ? category.children.filter((s) => s.id !== service.id) : category.children;
   const related = serviceCategories.filter((c) => c.id !== category.id).slice(0, 3);
+  const guides = guidesForService(entry.id).slice(0, 3);
 
   const schemas: object[] = [
     serviceSchema({ name: text.title, description: text.metaDescription, url, urgent, locale }),
@@ -218,6 +220,28 @@ export async function ServicePage({
                 <FaqList items={text.faq} className="mt-6" />
               </div>
             ) : null}
+
+            {guides.length > 0 && (
+              <div className="reveal">
+                <h2 className="text-[1.75rem] leading-tight text-ink sm:text-[2rem]">{t("guides")}</h2>
+                <ul className="mt-6 grid gap-3">
+                  {guides.map((g) => (
+                    <li key={g.id}>
+                      <Link
+                        href={{ pathname: "/guides/[slug]", params: { slug: g.text[locale].slug } }}
+                        className="group flex items-start justify-between gap-3 rounded-2xl border border-border bg-white p-4 transition-colors hover:border-emerald/40"
+                      >
+                        <span>
+                          <span className="block font-semibold text-ink group-hover:text-emerald">{g.text[locale].title}</span>
+                          <span className="mt-1 block text-[0.92rem] leading-relaxed text-muted-foreground">{g.text[locale].excerpt}</span>
+                        </span>
+                        <ArrowUpRight className="mt-1 size-4 shrink-0 text-gold-dark" aria-hidden="true" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </article>
 
           {/* Sidebar */}

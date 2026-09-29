@@ -56,6 +56,8 @@ export function pageMetadata({
         en: absoluteUrl(paths.en),
         "x-default": absoluteUrl(paths.bg),
       },
+      // Points AI assistants to the plain-Markdown summary of the site.
+      types: { "text/markdown": `${SITE_URL}/llms.txt` },
     },
     openGraph: {
       type: "website",

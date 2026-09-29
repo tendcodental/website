@@ -21,11 +21,13 @@ export function LanguageSwitcher({
 }) {
   const locale = useLocale() as Locale;
   const pathname = usePathname();
-  const params = useParams<{ category?: string; service?: string }>();
+  const params = useParams<{ category?: string; service?: string; slug?: string }>();
   const t = useTranslations("nav");
   const other: Locale = locale === "bg" ? "en" : "bg";
 
-  // Service slugs differ per language, so translate them; unknown routes fall back to the home page.
+  // Service and guide slugs differ per language, so translate them; unknown routes fall back to the home page.
+  // Dynamic routes use their template rather than `pathname`, which isn't a template during static
+  // rendering, so the server-rendered link (seen by crawlers) is already correct.
   const nextParams: Record<string, string> = {};
   let target = pathname as string;
   if (params.category) {
@@ -34,6 +36,15 @@ export function LanguageSwitcher({
     if (category && (!params.service || service)) {
       nextParams.category = category;
       if (service) nextParams.service = service;
+      target = service ? "/services/[category]/[service]" : "/services/[category]";
+    } else {
+      target = "/";
+    }
+  } else if (params.slug) {
+    const slug = slugMap[locale][params.slug];
+    if (slug) {
+      nextParams.slug = slug;
+      target = "/guides/[slug]";
     } else {
       target = "/";
     }

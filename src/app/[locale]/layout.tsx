@@ -89,7 +89,7 @@ export default async function LocaleLayout({
   }));
 
   return (
-    <html lang={locale} className={`${display.variable} ${text.variable}`}>
+    <html lang={locale} data-scroll-behavior="smooth" className={`${display.variable} ${text.variable}`}>
       <body className="min-h-dvh pb-[calc(6rem+env(safe-area-inset-bottom))] lg:pb-0">
         <a
           href="#main"

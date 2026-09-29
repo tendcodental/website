@@ -19,6 +19,14 @@ export function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
+export function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M16.6 3c.3 2.3 1.6 3.7 3.9 3.9v3c-1.4.1-2.6-.3-3.9-1.1v5.6c0 7.1-7.7 9.3-10.8 4.2-2-3.3-.8-9.100 5.5-9.300v3.200c-.5.100-1 .2-1.400.4-1.300.4-2 1.300-1.900 2.600.2 2.600 5.100 3.400 4.700-1.700V3z" />
+    </svg>
+  );
+}
+
 /** Brand-coloured social buttons (Facebook blue, Instagram gradient). */
 export function SocialLinks({ className }: { className?: string }) {
   return (
@@ -40,6 +48,15 @@ export function SocialLinks({ className }: { className?: string }) {
       >
         <InstagramIcon className="size-[1.15rem]" />
         Instagram
+      </a>
+      <a
+        href={clinic.socials.tiktok}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex h-11 items-center gap-2.5 rounded-full bg-[#010101] px-5 text-sm font-semibold text-white shadow-[0_10px_24px_-12px_rgb(0_0_0/0.9)] transition-[filter,transform] hover:brightness-125 active:scale-[0.98]"
+      >
+        <TikTokIcon className="size-[1.15rem]" />
+        TikTok
       </a>
     </div>
   );

@@ -22,6 +22,8 @@ export const routing = defineRouting({
       bg: "/uslugi/[category]/[service]",
       en: "/services/[category]/[service]",
     },
+    "/guides": { bg: "/saveti", en: "/guides" },
+    "/guides/[slug]": { bg: "/saveti/[slug]", en: "/guides/[slug]" },
     "/about": { bg: "/za-nas", en: "/about" },
     "/team": { bg: "/ekip", en: "/team" },
     "/contact": { bg: "/kontakti", en: "/contact" },

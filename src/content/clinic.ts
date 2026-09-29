@@ -5,7 +5,7 @@ export type Localized<T = string> = Record<Locale, T>;
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://tandcodental.com").replace(/\/$/, "");
 
 /** Bump when page content changes meaningfully, used as <lastmod> in the sitemap. */
-export const CONTENT_UPDATED = "2026-09-24";
+export const CONTENT_UPDATED = "2026-09-29";
 
 export const clinic = {
   name: "T&Co Dental",
@@ -27,15 +27,18 @@ export const clinic = {
    */
   geo: { lat: 42.13006, lng: 24.7486 },
   /** Regular (planned) appointments. Emergencies are handled 24/7 by phone. */
-  regularHours: { days: ["Mo", "Tu", "We", "Th", "Fr"] as const, opens: "09:00", closes: "18:00" },
+  regularHours: { days: ["Mo", "Tu", "We", "Th", "Fr"] as const, opens: "09:00", closes: "20:00" },
   socials: {
     facebook:
       "https://www.facebook.com/p/%D0%94%D0%B5%D0%BD%D0%BE%D0%BD%D0%BE%D1%89%D0%B5%D0%BD-%D0%97%D1%8A%D0%B1%D0%BE%D0%BB%D0%B5%D0%BA%D0%B0%D1%80%D1%81%D0%BA%D0%B8-%D0%9A%D0%B0%D0%B1%D0%B8%D0%BD%D0%B5%D1%82-%D0%A1%D0%BF%D0%B5%D1%88%D0%B5%D0%BD-247-%D0%A2-%D0%B5%D0%BD%D0%B4-%D0%9A%D0%BE-%D0%94%D0%B5%D0%BD%D1%82%D0%B0%D0%BB-61587490564038/",
     instagram: "https://www.instagram.com/tandcodental",
+    tiktok: "https://www.tiktok.com/@t.and.co.dental",
   },
   images: {
     interior: "/images/clinic-interior.jpg",
     entrance: "/images/clinic-entrance.jpg",
+    hero: "/images/clinic-hero.jpg",
+    team: "/images/clinic-team.jpg",
     logo: "/images/logo-marble.jpg",
   },
 } as const;

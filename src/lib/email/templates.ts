@@ -1,11 +1,12 @@
 import "server-only";
 import { reasonById } from "@/content/booking";
 import { clinic, fullAddress, mapLinks, SITE_URL } from "@/content/clinic";
-import { doctorById } from "@/content/doctors";
+import { type Doctor, doctorById } from "@/content/doctors";
 import type { Locale } from "@/i18n/routing";
 import type { ConfirmedBooking } from "@/lib/booking/create";
 import { buildIcs, googleCalendarLink } from "@/lib/booking/ics";
 import { CLINIC_TZ } from "@/lib/booking/time";
+import { getEmergencyPhones } from "@/lib/emergency";
 import { formatPhone } from "@/lib/phone";
 import type { EmailMessage } from "./send";
 
@@ -57,22 +58,34 @@ ${rows
 const button = (href: string, label: string) =>
   `<a href="${href}" style="display:inline-block;background:#1e5a45;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:600;font-size:14px;margin:4px 8px 4px 0;">${label}</a>`;
 
-function bookingParts(b: ConfirmedBooking) {
+/**
+ * The number patients should call about a booking. Doctors without a public number (`showPhone:
+ * false` in doctors.ts) fall back to the clinic's emergency number, since they have no line of
+ * their own yet.
+ */
+async function contactPhone(doctor: Doctor, locale: Locale) {
+  if (doctor.showPhone !== false) return doctor.phone;
+  const { phones } = await getEmergencyPhones();
+  return { tel: phones[0], display: formatPhone(phones[0], locale) };
+}
+
+async function bookingParts(b: ConfirmedBooking) {
   const locale = b.locale;
   const doctor = doctorById(b.doctorId)!;
   const reason = reasonById(b.reasonId)?.label[locale] ?? b.reasonId;
   const title = locale === "bg" ? `Час в ${clinic.name} (${doctor.shortName.bg})` : `${clinic.name} appointment (${doctor.shortName.en})`;
   const location = fullAddress(locale);
   const when = `${longDate(b.start, locale)}, ${b.time}`;
-  return { locale, doctor, reason, title, location, when };
+  const phone = await contactPhone(doctor, locale);
+  return { locale, doctor, phone, reason, title, location, when };
 }
 
-export function patientConfirmationEmail(b: ConfirmedBooking): EmailMessage {
-  const { locale, doctor, reason, title, location, when } = bookingParts(b);
+export async function patientConfirmationEmail(b: ConfirmedBooking): Promise<EmailMessage> {
+  const { locale, doctor, phone, reason, title, location, when } = await bookingParts(b);
   const bg = locale === "bg";
   const calDescription = bg
-    ? `${reason}\nЗа промяна или отказ: ${doctor.phone.display}`
-    : `${reason}\nTo change or cancel: ${doctor.phone.display}`;
+    ? `${reason}\nЗа промяна или отказ: ${phone.display}`
+    : `${reason}\nTo change or cancel: ${phone.display}`;
   const ics = buildIcs({ uid: b.eventId, start: b.start, end: b.end, title, description: calDescription, location });
   const gcal = googleCalendarLink({ start: b.start, end: b.end, title, description: calDescription, location });
 
@@ -88,8 +101,8 @@ ${detailsTable([
 <p style="margin:0 0 16px;">${button(gcal, bg ? "Добави в Google Календар" : "Add to Google Calendar")}${button(mapLinks.googleDirections, bg ? "Упътване" : "Directions")}</p>
 <p style="font-size:14px;line-height:1.6;color:#33443d;">${
     bg
-      ? `За промяна или отказ, моля, обадете се на <a href="tel:${doctor.phone.tel}" style="color:#1e5a45;font-weight:600;">${doctor.phone.display}</a>. Ако нещо се случи извън работно време, ние сме спешен денонощен зъболекарски кабинет и отговаряме 24/7.`
-      : `To change or cancel, please call <a href="tel:${doctor.phone.tel}" style="color:#1e5a45;font-weight:600;">${doctor.phone.display}</a>. If something comes up outside regular hours, we're a 24/7 emergency dental clinic and always answer.`
+      ? `За промяна или отказ, моля, обадете се на <a href="tel:${phone.tel}" style="color:#1e5a45;font-weight:600;">${phone.display}</a>. Ако нещо се случи извън работно време, ние сме спешен денонощен зъболекарски кабинет и отговаряме 24/7.`
+      : `To change or cancel, please call <a href="tel:${phone.tel}" style="color:#1e5a45;font-weight:600;">${phone.display}</a>. If something comes up outside regular hours, we're a 24/7 emergency dental clinic and always answer.`
   }</p>
 <p style="font-size:13px;color:#5a6863;">${bg ? "Файлът за календар е прикачен към този имейл." : "A calendar file is attached to this email."}</p>`;
 
@@ -99,7 +112,7 @@ ${detailsTable([
     `${bg ? "Лекар" : "Dentist"}: ${doctor.name[locale]}`,
     `${bg ? "Причина" : "Reason"}: ${reason}`,
     `${bg ? "Адрес" : "Address"}: ${location}`,
-    bg ? `За промяна или отказ: ${doctor.phone.display}` : `To change or cancel: ${doctor.phone.display}`,
+    bg ? `За промяна или отказ: ${phone.display}` : `To change or cancel: ${phone.display}`,
   ].join("\n");
 
   return {
@@ -112,8 +125,8 @@ ${detailsTable([
   };
 }
 
-export function patientReminderEmail(b: ConfirmedBooking): EmailMessage {
-  const { locale, doctor, reason, location, when } = bookingParts(b);
+export async function patientReminderEmail(b: ConfirmedBooking): Promise<EmailMessage> {
+  const { locale, doctor, phone, reason, location, when } = await bookingParts(b);
   const bg = locale === "bg";
   const inner = `
 <h1 style="font-family:Georgia,serif;font-weight:600;font-size:26px;margin:0 0 8px;">${bg ? "Напомняне за утрешния ви час" : "A reminder for tomorrow"}</h1>
@@ -127,14 +140,14 @@ ${detailsTable([
 <p style="margin:0 0 16px;">${button(mapLinks.googleDirections, bg ? "Упътване" : "Directions")}</p>
 <p style="font-size:14px;line-height:1.6;color:#33443d;">${
     bg
-      ? `Ако не можете да дойдете, моля, обадете се на <a href="tel:${doctor.phone.tel}" style="color:#1e5a45;font-weight:600;">${doctor.phone.display}</a>, за да предложим часа на друг пациент.`
-      : `If you can't make it, please call <a href="tel:${doctor.phone.tel}" style="color:#1e5a45;font-weight:600;">${doctor.phone.display}</a> so we can offer the slot to another patient.`
+      ? `Ако не можете да дойдете, моля, обадете се на <a href="tel:${phone.tel}" style="color:#1e5a45;font-weight:600;">${phone.display}</a>, за да предложим часа на друг пациент.`
+      : `If you can't make it, please call <a href="tel:${phone.tel}" style="color:#1e5a45;font-weight:600;">${phone.display}</a> so we can offer the slot to another patient.`
   }</p>`;
   return {
     to: b.email!,
     subject: bg ? `Напомняне: утре в ${b.time} | ${clinic.name}` : `Reminder: tomorrow at ${b.time} | ${clinic.name}`,
     html: layout(locale, bg ? `Утре в ${b.time}` : `Tomorrow at ${b.time}`, inner),
-    text: `${bg ? "Напомняне" : "Reminder"}: ${when}, ${doctor.name[locale]}, ${location}. ${doctor.phone.display}`,
+    text: `${bg ? "Напомняне" : "Reminder"}: ${when}, ${doctor.name[locale]}, ${location}. ${phone.display}`,
     replyTo: clinic.email,
   };
 }

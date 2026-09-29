@@ -1,4 +1,4 @@
-import { CalendarCheck, Mail, Phone } from "lucide-react";
+import { CalendarCheck, Phone } from "lucide-react";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { BookButton } from "@/components/shared/book-button";
@@ -21,7 +21,12 @@ export function DoctorPortrait({ doctor, locale, alt }: { doctor: Doctor; locale
   }
   return (
     <div className="bg-emerald-glow absolute inset-0 grid place-items-center" role="img" aria-label={alt}>
-      <svg viewBox="0 0 200 240" className="absolute inset-0 size-full opacity-60" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <svg
+        viewBox="0 0 200 240"
+        className="absolute inset-0 size-full opacity-60"
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid slice"
+      >
         <g fill="none" stroke="#c29b4a" strokeOpacity="0.35">
           <circle cx="100" cy="100" r="58" />
           <circle cx="100" cy="100" r="76" strokeDasharray="2 6" />
@@ -79,28 +84,33 @@ export async function DoctorCard({
         <p className="text-[0.7rem] font-semibold tracking-[0.2em] text-gold-dark uppercase">{doctor.role[locale]}</p>
         <H className="mt-1.5 text-[1.6rem] leading-tight text-ink lg:text-[1.8rem]">{doctor.name[locale]}</H>
         <div className="mt-3 space-y-2.5 text-[0.95rem] leading-relaxed text-muted-foreground">
-          {detailed ? (
-            doctor.bio[locale].map((p) => <p key={p.slice(0, 24)}>{p}</p>)
-          ) : (
-            <p className="line-clamp-4">{doctor.bio[locale][0]}</p>
-          )}
+          {(detailed ? doctor.bio[locale] : doctor.bio[locale].slice(0, 1)).map((p) => (
+            <p key={p.slice(0, 24)}>{p}</p>
+          ))}
         </div>
-        <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 border-t border-border pt-4 text-[0.92rem]">
-          <li>
-            <a href={`tel:${doctor.phone.tel}`} className="inline-flex items-center gap-2 font-semibold text-ink hover:text-emerald">
-              <Phone className="size-4 text-gold-dark" aria-hidden="true" />
-              {doctor.phone.display}
-            </a>
-          </li>
-          <li>
-            <a href={`mailto:${doctor.email}`} className="inline-flex items-center gap-2 text-ink/80 hover:text-emerald">
-              <Mail className="size-4 text-gold-dark" aria-hidden="true" />
-              {doctor.email}
-            </a>
-          </li>
-        </ul>
+        {/* Personal emails are hidden for now (kept in doctors.ts). */}
+        {doctor.showPhone !== false && (
+          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 border-t border-border pt-4 text-[0.92rem]">
+            <li>
+              <a
+                href={`tel:${doctor.phone.tel}`}
+                className="inline-flex items-center gap-2 font-semibold text-ink hover:text-emerald"
+              >
+                <Phone className="size-4 text-gold-dark" aria-hidden="true" />
+                {doctor.phone.display}
+              </a>
+            </li>
+          </ul>
+        )}
         <div className="mt-auto pt-5">
-          <BookButton doctor={doctor.id} size="pill" className="h-11 w-full px-5 sm:w-auto">
+          <BookButton
+            doctor={doctor.id}
+            size="pill"
+            className={cn(
+              "h-11 w-full px-5 sm:w-auto",
+              doctor.id === "chifligarova" && "h-auto min-h-11 max-w-full py-2 text-center whitespace-normal",
+            )}
+          >
             <CalendarCheck className="size-4" aria-hidden="true" />
             {t("bookWith", { name: doctor.shortName[locale] })}
           </BookButton>

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { clinic, CONTENT_UPDATED, SITE_URL } from "@/content/clinic";
+import { guides } from "@/content/guides";
 import { serviceCategories } from "@/content/services";
 import type { Locale } from "@/i18n/routing";
 import { absoluteUrl, type Href, localizedPaths } from "@/lib/seo";
@@ -9,13 +10,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date(CONTENT_UPDATED);
   const entries: MetadataRoute.Sitemap = [];
 
-  function add(hrefs: Record<Locale, Href>, priority: number, changeFrequency: "weekly" | "monthly" | "yearly", images?: string[]) {
+  function add(
+    hrefs: Record<Locale, Href>,
+    priority: number,
+    changeFrequency: "weekly" | "monthly" | "yearly",
+    images?: string[],
+    modified = lastModified,
+  ) {
     const paths = localizedPaths(hrefs);
     const languages = { bg: absoluteUrl(paths.bg), en: absoluteUrl(paths.en), "x-default": absoluteUrl(paths.bg) };
     for (const locale of ["bg", "en"] as const) {
       entries.push({
         url: absoluteUrl(paths[locale]),
-        lastModified,
+        lastModified: modified,
         changeFrequency,
         priority: locale === "bg" ? priority : Math.max(0.1, priority - 0.2),
         alternates: { languages },
@@ -24,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  const photos = [`${SITE_URL}${clinic.images.interior}`, `${SITE_URL}${clinic.images.entrance}`];
+  const photos = [`${SITE_URL}${clinic.images.interior}`, `${SITE_URL}${clinic.images.entrance}`, `${SITE_URL}${clinic.images.team}`];
 
   add({ bg: "/", en: "/" }, 1, "weekly", photos);
   add({ bg: "/book", en: "/book" }, 0.9, "monthly");
@@ -48,6 +55,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
         "monthly",
       );
     }
+  }
+  add({ bg: "/guides", en: "/guides" }, 0.7, "weekly");
+  for (const g of guides) {
+    add(
+      {
+        bg: { pathname: "/guides/[slug]", params: { slug: g.text.bg.slug } },
+        en: { pathname: "/guides/[slug]", params: { slug: g.text.en.slug } },
+      },
+      0.7,
+      "monthly",
+      g.thumbnail ? [`${SITE_URL}${g.thumbnail}`] : undefined,
+      new Date(g.updated),
+    );
   }
   add({ bg: "/about", en: "/about" }, 0.7, "monthly", photos);
   add({ bg: "/team", en: "/team" }, 0.7, "monthly");
