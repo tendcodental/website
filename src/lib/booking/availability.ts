@@ -1,5 +1,6 @@
 import "server-only";
 import { type DoctorId, doctors, isDoctorId } from "@/content/doctors";
+import { workingHoursOn } from "@/content/working-hours";
 import type { Locale } from "@/i18n/routing";
 import { calendarMode, env } from "@/lib/env";
 import { type CalendarClient, type CalendarEvent, createGoogleCalendar } from "@/lib/google/calendar";
@@ -79,7 +80,7 @@ export function computeDaySlots(date: string, blockers: Blocker[], choice: Docto
 
   for (const doctor of candidates) {
     if (allDay.some((b) => b.doctor === "all" || b.doctor === doctor.id)) continue;
-    for (const [from, to] of doctor.schedule[weekday] ?? []) {
+    for (const [from, to] of workingHoursOn(doctor.id, weekday)) {
       for (let t = toMinutes(from); t + bookingConfig.slotMinutes <= toMinutes(to); t += bookingConfig.slotMinutes) {
         const time = hhmm(t);
         const start = clinicTimeToUtc(date, time);
@@ -121,16 +122,19 @@ export async function getMonthAvailability(
   }
 
   const days: Record<string, string[]> = {};
+  const doctorsBySlot: Record<string, Record<string, DoctorId[]>> = {};
   if (from <= to) {
     const events = await calendar.list({ timeMin: clinicTimeToUtc(from), timeMax: clinicTimeToUtc(addDays(to, 1)) });
     const blockers = events.map(toBlocker).filter((b): b is Blocker => b !== null);
     for (let date = from; date <= to; date = addDays(date, 1)) {
       const slots = computeDaySlots(date, blockers, choice, now);
-      if (slots.length) days[date] = slots.map((s) => s.time);
+      if (!slots.length) continue;
+      days[date] = slots.map((s) => s.time);
+      doctorsBySlot[date] = Object.fromEntries(slots.map((s) => [s.time, s.doctors]));
     }
   }
 
-  return { today, lastDate, days, holidays };
+  return { today, lastDate, days, doctorsBySlot, holidays };
 }
 
 export async function getDaySlots(calendar: CalendarClient, date: string, choice: DoctorChoice, now = new Date()) {

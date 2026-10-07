@@ -9,6 +9,8 @@ export interface AvailabilityResponse {
   today: string;
   lastDate: string;
   days: Record<string, string[]>;
+  /** Who can take each free slot: date → time → doctors. */
+  doctorsBySlot: Record<string, Record<string, DoctorId[]>>;
   holidays: Record<string, string>;
 }
 

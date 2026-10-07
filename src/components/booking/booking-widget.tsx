@@ -1,18 +1,18 @@
 "use client";
 
-import { AlertCircle, ArrowRight, CalendarClock, Phone, Sparkles } from "lucide-react";
+import { AlertCircle, ArrowRight, CalendarClock, Phone } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useSite } from "@/components/providers/site-provider";
-import { doctorById, doctors } from "@/content/doctors";
+import { type Doctor, type DoctorId, doctorById, doctors } from "@/content/doctors";
 import type { Locale } from "@/i18n/routing";
-import { CLINIC_TZ, clinicDate } from "@/lib/booking/time";
+import { addDays, addMinutesToTime, CLINIC_TZ, clinicDate } from "@/lib/booking/time";
 import type { AvailabilityResponse, BookingSuccess, DoctorChoice } from "@/lib/booking/types";
 import { formatPhone } from "@/lib/phone";
 import { cn } from "@/lib/utils";
 import { BookingDetails, type DetailsForm, emptyDetails } from "./booking-details";
 import { BookingDone } from "./booking-done";
-import { DoctorAvatar } from "./doctor-avatar";
+import { DoctorAvatar, DoctorStack } from "./doctor-avatar";
 import { MonthCalendar, shiftMonth } from "./month-calendar";
 
 type Step = "pick" | "details" | "done";
@@ -21,6 +21,11 @@ type Availability =
   | { status: "ready"; data: AvailabilityResponse }
   | { status: "error"; code: string };
 type Entry = { status: "ready"; data: AvailabilityResponse } | { status: "error"; code: string };
+type Earliest = { date: string; time: string; doctors: Doctor[] };
+
+const toDoctors = (ids: DoctorId[] = []) => ids.map(doctorById).filter((d): d is Doctor => Boolean(d));
+/** White gap + the doctor's calendar colour around a portrait, matching the calendar dots. */
+const colorRing = (doctor: Doctor) => ({ boxShadow: `0 0 0 2px #fff, 0 0 0 3.5px ${doctor.calendarColorHex}` });
 
 export interface BookingWidgetProps {
   variant?: "section" | "dialog";
@@ -52,7 +57,7 @@ export function BookingWidget({ variant = "section", initialDoctor, doctorReques
   const [entries, setEntries] = useState<Record<string, Entry>>({});
   const [lastData, setLastData] = useState<AvailabilityResponse>();
   const [picked, setPicked] = useState<{ date: string | null; time: string | null }>({ date: null, time: null });
-  const [chosen, setChosen] = useState<{ date: string; time: string } | null>(null);
+  const [chosen, setChosen] = useState<{ date: string; time: string; doctor: DoctorChoice } | null>(null);
   const [step, setStep] = useState<Step>("pick");
   const [direction, setDirection] = useState<"fwd" | "back">("fwd");
   const [form, setForm] = useState<DetailsForm>(emptyDetails);
@@ -140,6 +145,41 @@ export function BookingWidget({ variant = "section", initialDoctor, doctorReques
   }, [month, data, picked.date, ready]);
   const slots = (date && data?.days[date]) || [];
   const time = picked.time && picked.date === date && slots.includes(picked.time) ? picked.time : null;
+  const anyMode = doctor === "any";
+
+  // "First available": show who works which day and who takes each slot.
+  const dots = useMemo(() => {
+    if (!anyMode || !data?.doctorsBySlot) return undefined;
+    return Object.fromEntries(
+      Object.entries(data.doctorsBySlot).map(([d, byTime]) => [
+        d,
+        toDoctors([...new Set(Object.values(byTime).flat())]).map((doc) => doc.calendarColorHex),
+      ]),
+    );
+  }, [anyMode, data]);
+
+  // The month the widget opened on (the next one if this month is already full). The "earliest" card
+  // is only true there, so it is hidden while browsing later months.
+  const landingEntry = Object.entries(entries).find(([k]) => k.startsWith(`${doctor}|${clientMonth}|`))?.[1];
+  const landingMonth =
+    clientMonth && landingEntry?.status === "ready" && !Object.keys(landingEntry.data.days).length
+      ? shiftMonth(clientMonth, 1)
+      : clientMonth;
+  const earliest = useMemo<Earliest | null>(() => {
+    if (!anyMode || !ready || !data || month !== landingMonth) return null;
+    const first = Object.keys(data.days).sort()[0];
+    const firstTime = first ? data.days[first][0] : undefined;
+    return first && firstTime
+      ? { date: first, time: firstTime, doctors: toDoctors(data.doctorsBySlot?.[first]?.[firstTime]) }
+      : null;
+  }, [anyMode, ready, data, month, landingMonth]);
+
+  // A slot only one doctor can take is booked with that doctor, so the patient knows who they'll see.
+  const resolveDoctor = (d: string, tm: string): DoctorChoice => {
+    if (!anyMode) return doctor;
+    const who = data?.doctorsBySlot?.[d]?.[tm];
+    return who?.length === 1 ? who[0] : "any";
+  };
 
   const intlLocale = locale === "bg" ? "bg-BG" : "en-GB";
   const formatLong = useCallback(
@@ -174,7 +214,7 @@ export function BookingWidget({ variant = "section", initialDoctor, doctorReques
     setBanner(known.includes(code) ? t(`errors.${code}`) : t("errors.generic"));
   }
 
-  const selectedDoctor = doctor === "any" ? null : doctorById(doctor);
+  const selectedDoctor = chosen && chosen.doctor !== "any" ? doctorById(chosen.doctor) : null;
   const doctorOptions: Array<{ id: DoctorChoice; title: string; subtitle: string }> = [
     ...doctors.map((d) => ({ id: d.id as DoctorChoice, title: d.shortName[locale], subtitle: d.role[locale] })),
     { id: "any", title: t("anyDoctor"), subtitle: t("anyDoctorHint") },
@@ -218,8 +258,8 @@ export function BookingWidget({ variant = "section", initialDoctor, doctorReques
                   {doc ? (
                     <DoctorAvatar doctor={doc} size={44} />
                   ) : (
-                    <span className="grid size-11 shrink-0 place-items-center rounded-full bg-gold-gradient text-emerald-night ring-2 ring-white">
-                      <Sparkles className="size-5" aria-hidden="true" />
+                    <span className="flex h-11 shrink-0 items-center">
+                      <DoctorStack doctors={doctors} size={30} />
                     </span>
                   )}
                   <span className="min-w-0">
@@ -282,6 +322,20 @@ export function BookingWidget({ variant = "section", initialDoctor, doctorReques
                 date={date}
                 time={time}
                 slots={slots}
+                anyMode={anyMode}
+                slotDoctors={(date && data?.doctorsBySlot?.[date]) || {}}
+                dots={dots}
+                earliest={earliest}
+                earliestLabel={
+                  !earliest || !data
+                    ? ""
+                    : earliest.date === data.today
+                      ? t("today")
+                      : earliest.date === addDays(data.today, 1)
+                        ? t("tomorrow")
+                        : formatLong(earliest.date)
+                }
+                onPickEarliest={() => earliest && setPicked({ date: earliest.date, time: earliest.time })}
                 longDate={formatLong(date)}
                 locale={locale}
                 foreignTz={foreignTz}
@@ -291,7 +345,7 @@ export function BookingWidget({ variant = "section", initialDoctor, doctorReques
                 onSelectTime={(s) => setPicked({ date, time: s })}
                 onContinue={() => {
                   if (!date || !time) return;
-                  setChosen({ date, time });
+                  setChosen({ date, time, doctor: resolveDoctor(date, time) });
                   setBanner(null);
                   go("details");
                 }}
@@ -300,7 +354,7 @@ export function BookingWidget({ variant = "section", initialDoctor, doctorReques
 
             {step === "details" && chosen && (
               <BookingDetails
-                doctor={doctor}
+                doctor={chosen.doctor}
                 selectedDoctor={selectedDoctor ?? null}
                 date={chosen.date}
                 time={chosen.time}
@@ -345,6 +399,12 @@ function PickStep({
   date,
   time,
   slots,
+  anyMode,
+  slotDoctors,
+  dots,
+  earliest,
+  earliestLabel,
+  onPickEarliest,
   longDate,
   locale,
   foreignTz,
@@ -360,6 +420,12 @@ function PickStep({
   date: string | null;
   time: string | null;
   slots: string[];
+  anyMode: boolean;
+  slotDoctors: Record<string, DoctorId[]>;
+  dots?: Record<string, string[]>;
+  earliest: Earliest | null;
+  earliestLabel: string;
+  onPickEarliest: () => void;
   longDate: string;
   locale: Locale;
   foreignTz: boolean;
@@ -419,6 +485,20 @@ function PickStep({
   }
 
   const monthHasSlots = Object.keys(data.days).some((d) => d.startsWith(month));
+  const scrollToContinue = () =>
+    requestAnimationFrame(() => continueRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
+
+  // Consecutive slots of the same doctor(s) form one group; outside "first available" there is one group.
+  const groups: Array<{ key: string; doctors: Doctor[]; slots: string[] }> = [];
+  for (const s of slots) {
+    const ids = anyMode ? (slotDoctors[s] ?? []) : [];
+    const key = ids.join(",");
+    const last = groups.at(-1);
+    if (last?.key === key) last.slots.push(s);
+    else groups.push({ key, doctors: toDoctors(ids), slots: [s] });
+  }
+  const earliestPicked = Boolean(earliest && date === earliest.date && time === earliest.time);
+  let order = 0;
 
   return (
     <div className="grid gap-7 md:grid-cols-[minmax(18rem,30rem)_minmax(10rem,14rem)] md:justify-center md:gap-6">
@@ -428,6 +508,52 @@ function PickStep({
             {t("demo")}
           </p>
         )}
+        {earliest && (
+          <button
+            type="button"
+            onClick={() => {
+              onPickEarliest();
+              scrollToContinue();
+            }}
+            aria-pressed={earliestPicked}
+            className={cn(
+              "animate-fade-up mb-5 flex w-full items-center gap-3.5 rounded-2xl border p-3 pr-3.5 text-left transition-all duration-300",
+              earliestPicked
+                ? "border-emerald bg-accent/60 ring-1 ring-emerald"
+                : "border-gold/40 bg-gradient-to-r from-gold/[0.12] via-gold/[0.04] to-transparent hover:border-gold hover:shadow-[0_12px_30px_-20px_rgb(168_124_46/0.9)]",
+            )}
+          >
+            {earliest.doctors.length === 1 ? (
+              <DoctorAvatar doctor={earliest.doctors[0]} size={48} style={colorRing(earliest.doctors[0])} />
+            ) : (
+              <DoctorStack doctors={earliest.doctors} size={36} />
+            )}
+            <span className="min-w-0 flex-1">
+              <span className="flex items-center gap-2 text-[0.66rem] font-semibold tracking-[0.1em] text-gold-dark uppercase sm:tracking-[0.16em]">
+                <span className="relative flex size-2" aria-hidden="true">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald/60" />
+                  <span className="relative inline-flex size-2 rounded-full bg-emerald" />
+                </span>
+                {t("earliestTitle")}
+              </span>
+              <span className="mt-0.5 block truncate font-semibold text-ink">
+                {earliestLabel} · <span className="text-emerald tabular-nums">{earliest.time}</span>
+              </span>
+              <span className="block truncate text-[0.82rem] text-muted-foreground">
+                {earliest.doctors.length === 1 ? earliest.doctors[0].name[locale] : t("anyDoctor")}
+              </span>
+            </span>
+            <span
+              className={cn(
+                "hidden shrink-0 rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-colors sm:inline-flex",
+                earliestPicked ? "bg-emerald text-white" : "bg-gold-gradient text-emerald-night",
+              )}
+            >
+              {earliestPicked ? t("earliestPicked") : t("earliestPick")}
+            </span>
+            <ArrowRight className="size-4 shrink-0 text-gold-dark sm:hidden" aria-hidden="true" />
+          </button>
+        )}
         <MonthCalendar
           month={month}
           locale={locale}
@@ -435,6 +561,7 @@ function PickStep({
           lastDate={data.lastDate}
           days={data.days}
           holidays={data.holidays}
+          dots={dots}
           selected={date}
           loading={availability.status === "loading"}
           onSelect={onSelectDate}
@@ -455,30 +582,54 @@ function PickStep({
         ) : slots.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("noSlotsDay")}</p>
         ) : (
-          <div className="grid grid-cols-3 gap-2 md:max-h-[22rem] md:grid-cols-1 md:overflow-y-auto md:pr-1" role="group" aria-label={t("selectTime")}>
-            {slots.map((s, i) => {
-              const active = s === time;
-              return (
-                <button
-                  key={s}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => {
-                    onSelectTime(s);
-                    requestAnimationFrame(() => continueRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
-                  }}
-                  style={{ animationDelay: `${i * 35}ms` }}
-                  className={cn(
-                    "animate-fade-up h-12 rounded-xl border text-[0.98rem] font-semibold tabular-nums transition-all duration-300",
-                    active
-                      ? "border-emerald bg-emerald text-white shadow-[0_10px_24px_-12px_rgb(30_90_69/0.9)]"
-                      : "border-emerald/25 text-emerald hover:border-emerald hover:bg-accent",
-                  )}
-                >
-                  {s}
-                </button>
-              );
-            })}
+          <div className="space-y-4" role="group" aria-label={t("selectTime")}>
+            {groups.map((g) => (
+              <div key={`${g.key}|${g.slots[0]}`}>
+                {g.doctors.length > 0 && (
+                  <div className="animate-fade-up mb-2.5 flex items-center gap-2.5" style={{ animationDelay: `${order * 35}ms` }}>
+                    {g.doctors.length === 1 ? (
+                      <DoctorAvatar doctor={g.doctors[0]} size={32} style={colorRing(g.doctors[0])} />
+                    ) : (
+                      <DoctorStack doctors={g.doctors} size={26} />
+                    )}
+                    <div className="min-w-0 leading-tight">
+                      <p className="truncate text-[0.86rem] font-semibold text-ink">
+                        {g.doctors.length === 1 ? g.doctors[0].shortName[locale] : t("anyDoctor")}
+                      </p>
+                      <p className="text-[0.72rem] text-muted-foreground tabular-nums">
+                        {g.slots[0]} - {addMinutesToTime(g.slots.at(-1)!, 60)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <div className="grid grid-cols-3 gap-2 md:grid-cols-2">
+                  {g.slots.map((s) => {
+                    const active = s === time;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        aria-pressed={active}
+                        aria-label={g.doctors.length === 1 ? `${s}, ${g.doctors[0].shortName[locale]}` : undefined}
+                        onClick={() => {
+                          onSelectTime(s);
+                          scrollToContinue();
+                        }}
+                        style={{ animationDelay: `${order++ * 35}ms` }}
+                        className={cn(
+                          "animate-fade-up h-12 rounded-xl border text-[0.98rem] font-semibold tabular-nums transition-all duration-300",
+                          active
+                            ? "border-emerald bg-emerald text-white shadow-[0_10px_24px_-12px_rgb(30_90_69/0.9)]"
+                            : "border-emerald/25 text-emerald hover:border-emerald hover:bg-accent",
+                        )}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         )}
         <button

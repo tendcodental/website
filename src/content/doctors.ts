@@ -23,17 +23,9 @@ export interface Doctor {
    */
   calendarColorId: string;
   calendarColorHex: string;
-  /** Weekly schedule for online booking, per ISO weekday (1 = Monday … 7 = Sunday). */
-  schedule: Partial<Record<1 | 2 | 3 | 4 | 5 | 6 | 7, Array<[string, string]>>>;
 }
 
-const weekdays9to20: Doctor["schedule"] = {
-  1: [["09:00", "20:00"]],
-  2: [["09:00", "20:00"]],
-  3: [["09:00", "20:00"]],
-  4: [["09:00", "20:00"]],
-  5: [["09:00", "20:00"]],
-};
+// Online-booking hours for each doctor live in ./working-hours.ts.
 
 export const doctors: Doctor[] = [
   {
@@ -62,7 +54,6 @@ export const doctors: Doctor[] = [
     },
     calendarColorId: "7",
     calendarColorHex: "#039be5",
-    schedule: weekdays9to20,
   },
   {
     id: "tairyumer",
@@ -90,7 +81,6 @@ export const doctors: Doctor[] = [
     },
     calendarColorId: "6",
     calendarColorHex: "#f4511e",
-    schedule: weekdays9to20,
   },
   {
     id: "chifligarova",
@@ -120,7 +110,6 @@ export const doctors: Doctor[] = [
     },
     calendarColorId: "2",
     calendarColorHex: "#33b679",
-    schedule: weekdays9to20,
   },
 ];
 

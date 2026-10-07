@@ -22,6 +22,7 @@ export function MonthCalendar({
   lastDate,
   days,
   holidays,
+  dots,
   selected,
   loading,
   onSelect,
@@ -33,6 +34,8 @@ export function MonthCalendar({
   lastDate: string;
   days: Record<string, string[]>;
   holidays: Record<string, string>;
+  /** Optional coloured markers under a day (e.g. which doctors work that day). */
+  dots?: Record<string, string[]>;
   selected: string | null;
   loading: boolean;
   onSelect: (date: string) => void;
@@ -145,18 +148,22 @@ export function MonthCalendar({
                 available
                   ? "bg-accent text-emerald hover:bg-emerald/15 active:scale-95"
                   : "cursor-default text-ink/25",
+                isToday && "ring-1 ring-gold ring-inset",
                 isSelected && "bg-emerald text-white shadow-[0_8px_20px_-8px_rgb(30_90_69/0.8)] hover:bg-emerald",
                 loading && !isSelected && "animate-pulse",
               )}
             >
               {dayNumber}
-              {isToday && (
-                <span
-                  className={cn(
-                    "absolute bottom-[14%] left-1/2 size-1 -translate-x-1/2 rounded-full",
-                    isSelected ? "bg-gold-light" : "bg-gold",
-                  )}
-                />
+              {available && dots?.[date] && (
+                <span className="absolute bottom-[13%] left-1/2 flex -translate-x-1/2 gap-[3px]" aria-hidden="true">
+                  {dots[date].map((color) => (
+                    <span
+                      key={color}
+                      className={cn("size-[5px] rounded-full", isSelected && "ring-1 ring-white")}
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </span>
               )}
               {holiday && !available && (
                 <span className="absolute top-[12%] right-[18%] size-1 rounded-full bg-alert/60" aria-hidden="true" />
